@@ -14,14 +14,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { z } from "zod";
+import axios from "axios";
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
-import { toast } from "sonner";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "@/graphql/actions/login.action";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { CurrentUser } from "@/utils/network";
 
 type Props = {
   onSetAccountHandelerFunction: boolean;
@@ -54,6 +56,13 @@ const Login = () => {
         email: data.email,
         password: data.password,
       };
+
+      const response = await axios.get(CurrentUser);
+      // const jsonData = await response.json();
+
+      console.log(response);
+      // Handle the error, display a message to the user, or retry the request.
+
       const res = await loginUser({
         variables: loginData,
       });
@@ -68,11 +77,12 @@ const Login = () => {
       // save the user token
       // localStorage.setItem('accessToken', res.data.loginUser.accessToken)
       // localStorage.setItem('refreshToken', res.data.loginUser.refreshToken)
+
+      router.push("/najncankqiu0933u988687?9u8&");
+      reset();
     } catch (error: any) {
       toast.error(error.message);
     }
-    reset();
-    router.push("/najncankqiu0933u988687?9u8&");
   };
 
   return (
@@ -128,14 +138,16 @@ const Login = () => {
             </Button>
           </div>
           <div className="flex flex-row-reverse items-start justify-between w-full">
-          <div className="w-full flex justify-end mt-5">
-            <Link href="/forgot-password" className="text-sm">
-              Forgot password?
-            </Link>
-          </div>
-          <div className="w-full flex justify-start mt-5">
-            <Link href="/signup" className="text-sm cursor-pointer">Register With us </Link>
-          </div>
+            <div className="w-full flex justify-end mt-5">
+              <Link href="/forgot-password" className="text-sm">
+                Forgot password?
+              </Link>
+            </div>
+            <div className="w-full flex justify-start mt-5">
+              <Link href="/signup" className="text-sm cursor-pointer">
+                Register With us{" "}
+              </Link>
+            </div>
           </div>
         </CardFooter>
       </form>

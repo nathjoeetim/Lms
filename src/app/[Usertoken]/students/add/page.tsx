@@ -19,7 +19,7 @@ function EnrollStudentComponent() {
   const [countries, setCountries] = useState<InnerOptions[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCountryData = async () => {
       try {
         const response = await fetch("https://restcountries.com/v3.1/all");
         if (!response.ok) {
@@ -35,7 +35,7 @@ function EnrollStudentComponent() {
       }
     };
 
-    fetchData();
+    fetchCountryData();
   }, []);
 
   console.log(countries);

@@ -10,6 +10,3 @@ export const store = configureStore({
     countryGetter: CountryFetcherApi.reducer,
   },
 });
-
-//  ui: UserInterface.reducer,
-// event: EventSlice.reducer,

@@ -1,8 +1,6 @@
 "use client";
 import Login from "@/components/Login";
-import AuthScreen from "@/screens/AuthScreen";
 import React, { useState } from "react";
-import RegistrationForm from "../signup/registrationForm";
 
 type Props = {};
 
