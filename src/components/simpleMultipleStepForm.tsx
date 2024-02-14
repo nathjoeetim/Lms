@@ -27,7 +27,7 @@ import { HashSpinner, ScaleSpinner } from "@/components/loader";
 import {
   InnerOptions,
   OnSelectSectionComponent,
-} from "@/app/[Usertoken]/admission/page";
+} from "@/app/admission/page";
 import { useRouter } from "next/navigation";
 
 function SimpleMultipleStepForm() {

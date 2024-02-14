@@ -25,7 +25,7 @@ export type CardContentAliases = {
   viewMore: boolean;
 };
 
-function OtherFeesCardComponent() {
+const OtherFeesCardComponent = () => {
   const [CardContentModel, setCardContentModel] = useState<
     CardContentAliases[]
   >([

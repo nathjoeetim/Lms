@@ -1,16 +1,17 @@
-import { GET_USERS } from '@/graphql/actions/getUser.actions'
-import { useQuery } from '@apollo/client'
-import React from 'react'
+
+import React, { useState } from 'react'
+import useAxios from './useAxios'
+import { CurrentUser } from '@/utils/network'
+import { UserType } from '@/utils/types'
 
 type Props = {}
 
-const useUser = (props: Props) => {
-    const { data, loading } = useQuery(GET_USERS)
-    console.log(data);
-    return {
-        loading,
-        user: data.getLoggedInUser.user
-    }
+const useUser = async (props: Props) => {
+    const [loading, setLoading] = useState(false)
+    const {axiosHandler} = useAxios()
+    const res = await axiosHandler<UserType>(CurrentUser, "get", null, true)
+    console.log(res);
+    // triger the effect or use a state to store the user 
 }
 
 export default useUser

@@ -1,9 +1,9 @@
 "use client";
 import React from "react"; // Added React import statement
-import { SubTitleComponent } from "../../page"; // Fixed relative path
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BiCloudDownload } from "react-icons/bi";
+import { SubTitleComponent } from "@/app/dashboard/page";
 
 function BulkImportEnrolment() {
   return (

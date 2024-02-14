@@ -12,22 +12,20 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
 import { z } from "zod";
 import axios from "axios";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
-import { useMutation } from "@apollo/client";
-import { LOGIN_USER } from "@/graphql/actions/login.action";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
-import { CurrentUser } from "@/utils/network";
 
-type Props = {
-  onSetAccountHandelerFunction: boolean;
-};
+import { useRouter } from "next/navigation";
+import { AdminLoginUrl, CurrentUser } from "@/utils/network";
+import useAxios from "@/hooks/useAxios";
+import { SignInResponseType } from "@/utils/types";
+import Link from 'next/link';
+import { auth_token, session_active } from "@/utils/constant";
+
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -38,7 +36,7 @@ type LoginSchema = z.infer<typeof formSchema>;
 
 const Login = () => {
   const router = useRouter();
-  const [loginUser, { loading }] = useMutation(LOGIN_USER);
+  const { axiosHandler } = useAxios()
   const {
     register,
     handleSubmit,
@@ -51,40 +49,26 @@ const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const onSubmit = async (data: LoginSchema) => {
-    try {
-      const loginData = {
-        email: data.email,
-        password: data.password,
-      };
 
-      const response = await axios.get(CurrentUser);
-      // const jsonData = await response.json();
-
-      console.log(response);
-      // Handle the error, display a message to the user, or retry the request.
-
-      const res = await loginUser({
-        variables: loginData,
-      });
-      console.log(res);
-      if (res.data.loginUser.error) {
-        toast.error(res.data.loginUser.error.message);
-      }
-      toast.success("Login successful");
-      Cookies.set("refresh_token", res.data.loginUser.refreshToken);
-      Cookies.set("access_token", res.data.loginUser.accessToken);
-
-      // save the user token
-      // localStorage.setItem('accessToken', res.data.loginUser.accessToken)
-      // localStorage.setItem('refreshToken', res.data.loginUser.refreshToken)
-
-      router.push("/najncankqiu0933u988687?9u8&");
-      reset();
-    } catch (error: any) {
-      toast.error(error.message);
+    const loginData = {
+      email: data.email,
+      password: data.password,
     }
-  };
 
+    const response = await axiosHandler<SignInResponseType, typeof loginData>(AdminLoginUrl, "post", loginData)
+
+    // console.log(response);
+
+    if (response) {
+      localStorage.setItem(auth_token, response.access_token)
+      localStorage.removeItem(session_active)
+
+      // redirect to dashboard
+      router.push("/dashboard");
+    }
+    
+    reset();
+  }
   return (
     <Card className="w-[350px] md:w-[450px]">
       <CardHeader>
@@ -132,7 +116,7 @@ const Login = () => {
             <Button
               className="w-full"
               type="submit"
-              disabled={isSubmitting || loading}
+              disabled={isSubmitting}
             >
               Login
             </Button>

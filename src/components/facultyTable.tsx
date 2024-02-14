@@ -23,8 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { InnerOptions, OnSelectSectionComponent } from "../admission/page";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -34,6 +33,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { InnerOptions, OnSelectSectionComponent } from "@/app/dashboard/admission/page";
+import useAxios from "@/hooks/useAxios";
+import { FacultyType, PaginatedType } from "@/utils/types";
+import { FacultiesUrl } from "@/utils/network";
+import { auth_token } from "@/utils/constant";
 
 
 const data: TableContentAliese[] = [
@@ -204,6 +208,24 @@ const columns: ColumnDef<TableContentAliese>[] = [
 ];
 
 function FacultyComponent() {
+  // const token = localStorage.getItem(auth_token)
+  
+  const { axiosHandler } = useAxios()
+
+  const getFaculties = async () => {
+  
+    const response = await axiosHandler<PaginatedType<FacultyType>>(FacultiesUrl, "get", null, true)
+    if (response) {
+      console.log(response.results)
+    }
+  }
+
+  useEffect(() => {
+    getFaculties()
+  
+  }, [])
+  
+
   return (
     <Card
       className={`flex flex-col justify-start items-start  w-[97%] mx-auto px-2 transition-height duration-300 mb-9 `}
@@ -217,11 +239,11 @@ function FacultyComponent() {
             </div>
           </AccordionTrigger>
           <AccordionContent>
-          <div className="flex flex-rol items-center justify-end gap-3  w-full p-4 box-border">
-                <h5 className="flex flex-row items-center justify-centerfont-normal text-sm bg-slate-600 p-1 text-slate-200 rounded-sm cursor-pointer hover:shadow-md ">
-                  <AddFacultyAlertDialog />
-                </h5>
-              </div>
+            <div className="flex flex-rol items-center justify-end gap-3  w-full p-4 box-border">
+              <h5 className="flex flex-row items-center justify-centerfont-normal text-sm bg-slate-600 p-1 text-slate-200 rounded-sm cursor-pointer hover:shadow-md ">
+                <AddFacultyAlertDialog />
+              </h5>
+            </div>
             <div className="p-3 w-full">
               <DataTableDemo data={data} columns={columns} />
             </div>
@@ -246,7 +268,7 @@ export function AddFacultyAlertDialog() {
     {
       content: "Clinical Science",
     },
-  ];  
+  ];
   const Staff: InnerOptions[] = [
     {
       content: "SAMUEL",
@@ -254,7 +276,7 @@ export function AddFacultyAlertDialog() {
     {
       content: "Ubong",
     },
- 
+
   ];
   return (
     <AlertDialog>
@@ -277,7 +299,7 @@ export function AddFacultyAlertDialog() {
               </div>
               <div className="flex flex-col items-start justify-start w-[90%] gap-0">
                 <h4 className="text-base font-semibold text-gray-800">
-                 Dean
+                  Dean
                 </h4>
                 <OnSelectSectionComponent
                   placeHolder="Select"

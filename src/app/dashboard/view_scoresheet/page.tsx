@@ -1,10 +1,10 @@
 "use client";
 import { Card } from "@/components/ui/card";
-import { SubTitleComponent } from "../page";
 import { IoFilterOutline } from "react-icons/io5";
-import { InnerOptions, OnSelectSectionComponent } from "../admission/page";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { InnerOptions, OnSelectSectionComponent } from "../admission/page";
+import { SubTitleComponent } from "../page";
 
 function ExamsResultComponent() {
   const [selectedSectionValue, setSelectedSectionValue] = useState<string>();

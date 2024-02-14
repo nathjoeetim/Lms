@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import RegistrationForm from "./registrationForm";
+import RegistrationForm from "../../../components/registrationForm";
 import Link from "next/link";
 
 type Props = {};

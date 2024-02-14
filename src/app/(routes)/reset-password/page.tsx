@@ -1,4 +1,4 @@
-import ResetPassword from '@/components/ResetPassword';
+import ResetPassword from '@/components/auth/ResetPassword';
 import React from 'react'
 
 type Props = {

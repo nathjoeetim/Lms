@@ -1,7 +1,6 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { SubTitleComponent } from "../page";
 import React, { useState } from "react";
 import { IoFilterOutline } from "react-icons/io5";
 import {
@@ -23,6 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { SubTitleComponent } from "../page";
 
 export type OptionAlieses = {
   placeHolder: string;
@@ -213,7 +213,7 @@ export function OnSelectSectionComponent({
 
   return (
     <Select value={selectedValue} onValueChange={handleSelectChange}>
-      <SelectTrigger className=" w-full h-[2.2rem] text-[.8rem] flex flex-row items-center">
+      <SelectTrigger className=" w-full text-[.8rem] flex flex-row items-center">
         <SelectValue placeholder={placeHolder} />
       </SelectTrigger>
       <SelectContent>

@@ -1,6 +1,5 @@
 "use client";
 import { Card } from "@/components/ui/card";
-import { SubTitleComponent } from "../page";
 import {
   DataTableDemo,
   TableContentAliese,
@@ -17,7 +16,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import FacultyComponent from "./facultyTable";
 import { FaSquarePlus } from "react-icons/fa6";
 import {
   Accordion,
@@ -39,6 +37,8 @@ import {
 import { InnerOptions, OnSelectSectionComponent } from "../admission/page";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { SubTitleComponent } from "../page";
+import FacultyComponent from "@/components/facultyTable";
 
 const data: TableContentAliese[] = [
   {

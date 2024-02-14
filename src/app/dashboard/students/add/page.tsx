@@ -1,17 +1,17 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
-import { SubTitleComponent } from "../../page";
 import { MdRadioButtonChecked } from "react-icons/md";
 import { MdOutlineRadioButtonUnchecked } from "react-icons/md";
 import Image from "next/image";
 import { toast } from "sonner";
 import { MdAddCircle } from "react-icons/md";
 import { Input } from "@/components/ui/input";
-import { InnerOptions, OnSelectSectionComponent } from "../../admission/page";
 import { Button } from "@/components/ui/button";
-import useInputValidator, { isEmail, isNotEmpty } from "@/screens/inputAuth";
 import { useSelector } from "react-redux";
+import useInputValidator, { isEmail, isNotEmpty } from "@/screens/inputAuth";
+import { SubTitleComponent } from "@/app/dashboard/page";
+import { InnerOptions, OnSelectSectionComponent } from "../../admission/page";
 
 function EnrollStudentComponent() {
   const [selectedCountry, setSelectedCountry] = useState<string>("");

@@ -1,11 +1,12 @@
 "use client";
+import DashBoardCard from "@/components/dashBoardItems/dashBoardCard";
+import DashBoardSummaryCards from "@/components/dashBoardItems/dashBoardSummary";
+import FeesTopComponent from "@/components/dashBoardItems/feesTopComponent";
+import NewAndEventComponent from "@/components/dashBoardItems/new/newsContainer";
+import OtherFeesCardComponent from "@/components/dashBoardItems/otherFeesCardComponent";
+import PopulationDistributionComponent from "@/components/dashBoardItems/populationDistribution";
 import Link from "next/link";
-import DashBoardCard from "./dashBoardItems/dashBoardCard";
-import DashBoardSummaryCards from "./dashBoardItems/dashBoardSummary";
-import FeesTopComponent from "./dashBoardItems/feesTopComponent";
-import NewAndEventComponent from "./dashBoardItems/new/newsContainer";
-import OtherFeesCard from "./dashBoardItems/otherFeesCardComponent";
-import PopulationDistributionComponent from "./dashBoardItems/populationDistribution";
+
 
 interface SubTitleProps {
   pageIdentifier: string;
@@ -26,7 +27,7 @@ function DashBoardComponent() {
       <DashBoardSummaryCards />
       <DashBoardCard />
       <FeesTopComponent />
-      <OtherFeesCard />
+      <OtherFeesCardComponent />
       <NewAndEventComponent />
       <PopulationDistributionComponent />
     </div>

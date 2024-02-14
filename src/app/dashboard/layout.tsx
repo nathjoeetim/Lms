@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,13 +16,13 @@ import { FaUser } from "react-icons/fa";
 import { GiPadlock } from "react-icons/gi";
 import { TbDoorExit } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
-import SideBarItemsComponent from "@/app/[Usertoken]/SideBarItems";
 import { FaSearch } from "react-icons/fa";
-import HeaderDashboard from "./dashBoardHeader";
+import HeaderDashboard from "../../components/dashBoardHeader";
 import { PiDesktopTowerDuotone } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
 import { UserInterfaceActions } from "@/redux/ui";
 import { HashSpinner } from "@/components/loader";
+import SideBarItemsComponent from "@/components/SideBarItems";
 
 interface Metadata {
   title: string;
@@ -30,7 +30,7 @@ interface Metadata {
 }
 
 interface SideBarContainerProps {
-  isVisible: boolean;
+  $isVisible: boolean;
 }
 
 const metadata: Metadata = {
@@ -44,11 +44,14 @@ interface RootLayoutProps {
 
 const DashBoardLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const sideBarState = useSelector((store: any) => store.ui.showSideBar);
+  const [isMounted, setIsMounted] = useState(false)
   const dispatch = useDispatch();
 
   // State to manage sidebar visibility
   // Effect to handle window resize and update sidebar visibility
   useEffect(() => {
+    // this gets rid of hydration error waits for the component to mount
+    setIsMounted(true)
     // Function to handle window resize
     function handleResize() {
       // Get the current screen width
@@ -70,7 +73,7 @@ const DashBoardLayout: React.FC<RootLayoutProps> = ({ children }) => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [dispatch]);
+  }, [dispatch, isMounted]);
 
   console.log(sideBarState);
   return (
@@ -80,11 +83,10 @@ const DashBoardLayout: React.FC<RootLayoutProps> = ({ children }) => {
       </head>
       <body>
         <div className="flex flex-row  bg-[#F0F2F5] w-full  h-screen ">
-          <SideBarContainer
-            isVisible={sideBarState}
-            className={` flex flex-col gap-2 border-r border-solid border-gray-500 box-border bg-white ${
-              sideBarState ? "min-w-72 max-w-72" : "w-0"
-            }`}
+          {isMounted && <SideBarContainer
+            $isVisible={sideBarState}
+            className={` flex flex-col gap-2 border-r border-solid border-gray-500 box-border bg-white ${sideBarState ? "min-w-72 max-w-72" : "w-0"
+              }`}
           >
             <div className="flex flex-row items-center gap-1 w-full  justify-between p-2 transition duration-300 ease-in-out  shadow-sm ">
               <div className="flex flex-row items-center gap-3">
@@ -116,7 +118,7 @@ const DashBoardLayout: React.FC<RootLayoutProps> = ({ children }) => {
             </div>
             <SideBarItemsComponent />
           </SideBarContainer>
-
+          }
           <div className="absolute flex flex-col p-3 bg-slate-600 bottom-2 items-center justify-center right-[-1rem] transform -translate-x-1/2 rounded-lg opacity-75 z-50 cursor-pointer hover:opacity-100">
             <PiDesktopTowerDuotone size={23} color="white" />
             <h4 className="text-slate-50">E-class</h4>
@@ -169,8 +171,8 @@ export const DropDownMenu = () => {
 const SideBarContainer = styled.div<SideBarContainerProps>`
   height: 100%;
 
-  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
-  transform: translateX(${({ isVisible }) => (isVisible ? "0" : "-80rem")});
+  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
+  transform: translateX(${({ $isVisible }) => ($isVisible ? "0" : "-80rem")});
   transition: opacity 1s ease-in-out, transform 0.3s ease-in-out, left 0.3s ease;
 
   @media screen and (max-width: 730px) {
@@ -178,3 +180,4 @@ const SideBarContainer = styled.div<SideBarContainerProps>`
     position: absolute;
   }
 `;
+

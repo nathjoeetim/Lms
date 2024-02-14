@@ -1,4 +1,4 @@
-import ForgotPassword from '@/components/ForgotPassword'
+import ForgotPassword from '@/components/auth/ForgotPassword'
 import React from 'react'
 
 type Props = {}

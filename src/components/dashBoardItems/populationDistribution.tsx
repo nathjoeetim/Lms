@@ -108,7 +108,7 @@ type PopulationCardContentAliases = {
   series: Array<object> | any;
 };
 
-function PopulationDistributionComponent() {
+const PopulationDistributionComponent = () => {
   const [populationData, _setPoplationData] = useState<
     PopulationCardContentAliases[]
   >([

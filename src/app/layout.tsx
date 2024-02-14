@@ -1,7 +1,6 @@
 "use client";
 
 import { Toaster } from "@/components/ui/sonner";
-import { Providers } from "@/providers/GraphProviders";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -21,13 +20,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  useEffect(() => {});
+
 
   return (
     <html lang="en">
       <body className={inter.className}>
         <Provider store={store}>
-          <Providers>{children}</Providers>
+          {children}
           <Toaster richColors />
         </Provider>
       </body>

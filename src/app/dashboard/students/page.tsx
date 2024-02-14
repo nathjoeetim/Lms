@@ -1,8 +1,6 @@
 "use client";
 import { IoFilterOutline } from "react-icons/io5";
 import { Card } from "@/components/ui/card";
-import { SubTitleComponent } from "../page";
-import { InnerOptions, OnSelectSectionComponent } from "../admission/page";
 import { useState } from "react";
 import {
   AlertDialog,
@@ -17,7 +15,9 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import SearchedStudentComponent from "./searchedStudent";
+import { InnerOptions, OnSelectSectionComponent } from "../admission/page";
+import { SubTitleComponent } from "../page";
+import SearchedStudentComponent from "@/components/searchedStudent";
 
 function Student() {
   const [options, _setOptions] = useState<InnerOptions[]>([
@@ -99,49 +99,46 @@ function Student() {
           <IoFilterOutline size={19} />
           <h5 className="font-normal text-xl">Select Department to view</h5>
         </div>
-        <div className="flex flex-col items-start p-3  w-full gap-4">
-          <div className="w-[100%] flex flex-row items-center gap-4 justify-evenly">
-            <div className="flex flex-col items-start w-[240px]">
-              <h4 className="text-[.8rem] font-semibold">
-                {" "}
-                Select Department{" "}
-              </h4>
+        <div className="flex flex-col items-start p-3 w-full gap-4">
+          <div className="w-full flex flex-row items-center gap-4 justify-evenly">
+            <div className="w-60">
+              <h4 className="text-sm font-semibold">Select Department</h4>
               <OnSelectSectionComponent
                 placeHolder="Department"
                 options={department}
                 onGetSelectedValueHandeler={setSelectedDepartmentValue}
               />
-            </div>{" "}
-            <div className="flex flex-col items-start w-[140px]">
-              <h4 className="text-[.8rem] font-semibold">Select Level</h4>
+            </div>
+            <div className="w-40">
+              <h4 className="text-sm font-semibold">Select Level</h4>
               <OnSelectSectionComponent
                 placeHolder="Level"
                 options={options}
                 onGetSelectedValueHandeler={setSelectedLevelValue}
               />
             </div>
-            <div className="flex flex-col items-start w-[240px]">
-              <h4 className="text-[.8rem] font-semibold">Account Status</h4>
+            <div className="w-60">
+              <h4 className="text-sm font-semibold">Account Status</h4>
               <OnSelectSectionComponent
-                options={status}
                 placeHolder="Status"
+                options={status}
                 onGetSelectedValueHandeler={setSelectedStatusValue}
               />
             </div>
-            <div className="flex flex-col items-start w-[240px]">
-              <h4 className="text-[.8rem] font-semibold">Program</h4>
+            <div className="w-60">
+              <h4 className="text-sm font-semibold">Program</h4>
               <OnSelectSectionComponent
-                options={program}
                 placeHolder="Select Program"
+                options={program}
                 onGetSelectedValueHandeler={setSelectedProgramValue}
               />
             </div>
           </div>
-          <div className="flex flex-row items-start justify-start w-[180px] pl-2">
+          <div className="flex flex-row items-start justify-start w-48">
             <Input placeholder="Registration number" />
           </div>
-          <div className="flex flex-row items-center justify-center p-3 py-3 w-full">
-            <Button> View Student</Button>
+          <div className="flex items-center justify-center p-3 w-full">
+            <Button>View Student</Button>
           </div>
         </div>
       </Card>

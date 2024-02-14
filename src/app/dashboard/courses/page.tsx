@@ -1,6 +1,5 @@
 "use client";
 import { Card } from "@/components/ui/card";
-import { SubTitleComponent } from "../page";
 import { IoFilterOutline } from "react-icons/io5";
 import {
   Accordion,
@@ -8,9 +7,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { InnerOptions, OnSelectSectionComponent } from "../admission/page";
 import { useState } from "react";
-import SelectedDepartmentCourse from "./selectedCourses";
+import { InnerOptions, OnSelectSectionComponent } from "../admission/page";
+import { SubTitleComponent } from "../page";
+import SelectedDepartmentCourse from "@/components/selectedCourses";
 
 function CoursesComponent() {
   const [level, _setLevels] = useState<InnerOptions[]>([
