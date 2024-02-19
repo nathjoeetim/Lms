@@ -1,3 +1,5 @@
+import { string } from "zod";
+
 export type SignInResponseType = {
   access_token: string;
 };
@@ -78,4 +80,13 @@ export type StudentType = {
   level: string;
   matric_no: string;
   courses: any[];
+};
+
+export type CreateDepartmentType = {
+  name: string;
+  short_name: string;
+  program_duration: string;
+  qualification: string;
+  faculty: string;
+  level: number;
 };

@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { FetchData } from "@/redux/fetchCurrentUserData";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import { auth_token } from "@/utils/constant";
 
 function AdminProfileComponent() {
   const dispatch = useDispatch();
@@ -16,7 +17,12 @@ function AdminProfileComponent() {
   );
 
   useEffect(() => {
-    FetchData(dispatch, router);
+    if (localStorage.getItem(auth_token)) {
+      FetchData(dispatch, router);
+    } else {
+      console.log("auth_token does not exist");
+      router.push("/login");
+    }
   });
 
   return (
