@@ -13,7 +13,7 @@ import { subContentItem } from "./admissionSubComponent";
 import Link from "next/link";
 
 function AcademicsSubContent() {
-  const pathname = usePathname()
+  const pathname = usePathname();
   const [isActive1, setIsActive1] = useState(false);
   const [isActive2, setIsActive2] = useState(false);
   const [isActive3, setIsActive3] = useState(false);
@@ -25,16 +25,20 @@ function AcademicsSubContent() {
     {
       tittle: "Courses",
       link: "/dashboard/courses",
-    },{
-      tittle: " Course Registration",
+    },
+    {
+      tittle: "Course Registration",
       link: "#",
-    },{
+    },
+    {
       tittle: "Virtual Classroom",
       link: "#",
-    },{
-      tittle: " TimeTable / Schedule",
+    },
+    {
+      tittle: "TimeTable / Schedule",
       link: "#",
-    },{
+    },
+    {
       tittle: "Contents / Resource Library",
       link: "#",
     },
@@ -69,21 +73,21 @@ function AcademicsSubContent() {
             </div>
           </AccordionTrigger>
           {contents.map((element, index) => {
-          const sideItemIsActive = pathname === element.link;
-          return (
-            <Link key={index} href={element.link}>
-              <AccordionContent
-                className={`flex flex-row items-center justify-start p-2 mb-2 h-12 hover:bg-[#F0F2F5] font-medium text-[.8rem] hover:text-indigo-400 text-slate-400 hover:border-l-4 hover:border-indigo-300 ${
-                  sideItemIsActive
-                    ? "border-l-4 border-indigo-300 text-indigo-400 bg-[#F0F2FF5] bg-[#F0F2F5]"
-                    : ""
-                }`}
-              >
-                {element.tittle}
-              </AccordionContent>
-            </Link>
-          );
-        })}
+            const sideItemIsActive = pathname === element.link;
+            return (
+              <Link key={index} href={element.link}>
+                <AccordionContent
+                  className={`flex flex-row items-center justify-start p-2 mb-2 h-12 hover:bg-[#F0F2F5] font-medium text-[.8rem] hover:text-indigo-400 text-slate-400 hover:border-l-4 hover:border-indigo-300 ${
+                    sideItemIsActive
+                      ? "border-l-4 border-indigo-300 text-indigo-400 bg-[#F0F2FF5] bg-[#F0F2F5]"
+                      : ""
+                  }`}
+                >
+                  {element.tittle}
+                </AccordionContent>
+              </Link>
+            );
+          })}
         </AccordionItem>
       </Accordion>
 
@@ -151,4 +155,4 @@ function AcademicsSubContent() {
   );
 }
 
-export default AcademicsSubContent
+export default AcademicsSubContent;

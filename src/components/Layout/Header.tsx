@@ -17,19 +17,15 @@ const Header = () => {
         <FlyoutLink href="#" FlyoutContent={HomeContent}>
           Home
         </FlyoutLink>
-
         <FlyoutLink href="#" FlyoutContent={Administration}>
           Administration
         </FlyoutLink>
-
         <FlyoutLink href="#" FlyoutContent={PricingContent}>
           Schools
         </FlyoutLink>
-
         <FlyoutLink href="#" FlyoutContent={PricingContent}>
           Gallery
         </FlyoutLink>
-
         <FlyoutLink href="#" FlyoutContent={PricingContent}>
           Services
         </FlyoutLink>
