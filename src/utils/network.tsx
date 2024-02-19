@@ -1,0 +1,9 @@
+export const BASE_URL = "https://fozy-sms.onrender.com/api";
+export const CurrentUser = `${BASE_URL}/users/user`;
+export const AdminLoginUrl = `${BASE_URL}/users/login/`;
+export const SignupStudemtUrl = `${BASE_URL}/users/student/`;
+export const DepartmentUrl = `${BASE_URL}/departments`;
+export const FacultiesUrl = `${BASE_URL}/faculties`;
+export const LecturersUrl = `${BASE_URL}/users/lecturer/`;
+export const AddDepartmentURL = `${BASE_URL}/departments`;
+export const StudentUrl = `${BASE_URL}/users/student`;

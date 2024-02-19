@@ -1,0 +1,18 @@
+{
+  "folders": [],
+  "settings": {
+    "files.autoSave": "onWindowChange",
+    "editor.fontSize": 10,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "application.experimental.rendererProfiling": false,
+    "editor.suggestFontSize": 12,
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "modifications"
+  },
+  "extensions": {
+    "recommendations": [
+      "dzhavat.bracket-pair-toggler",
+      "esbenp.prettier-vscode"
+    ]
+  }
+}
