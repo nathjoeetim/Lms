@@ -28,7 +28,7 @@ import { SignupStudemtUrl } from "@/utils/network";
 
 function SimpleMultipleStepForm() {
   const router = useRouter();
-  const { axiosHandler } = useAxios();
+  // const { axiosHandler } = useAxios(router);
   const [department, _setDepartment] = useState<string[]>([
     "Business Management ",
     "Law",
@@ -189,16 +189,16 @@ function SimpleMultipleStepForm() {
     if (isValid && confirmPasswordInputValue === passwordInputValue) {
       console.log("Deatailed is Valid");
 
-      const response = await axiosHandler<signUpSheme, typeof signupData>(
-        SignupStudemtUrl,
-        "post",
-        signupData
-      );
-      if (response) {
-        router.push("/login");
-      } else {
-        console.log("failed to push");
-      }
+      // const response = await axiosHandler<signUpSheme, typeof signupData>(
+      //   SignupStudemtUrl,
+      //   "post",
+      //   signupData
+      // );
+      // if (response) {
+      //   router.push("/login");
+      // } else {
+      //   console.log("failed to push");
+      // }
     }
 
     console.log("is Submitted");
