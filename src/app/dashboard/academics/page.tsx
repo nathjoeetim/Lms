@@ -31,7 +31,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { OnSelectSectionComponent } from "../admission/page";
+import OnSelectSectionComponent from "@/components/selectedSection";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { SubTitleComponent } from "../page";

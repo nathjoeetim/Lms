@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { IoFilterOutline } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { OnSelectSectionComponent } from "../admission/page";
+import OnSelectSectionComponent from "@/components/selectedSection";
 import { SubTitleComponent } from "../page";
 import { useSelector } from "react-redux";
 import { FetchData } from "@/redux/fetchCurrentUserData";

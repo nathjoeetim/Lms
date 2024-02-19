@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { OnSelectSectionComponent } from "../admission/page";
+import OnSelectSectionComponent from "@/components/selectedSection";
 import { SubTitleComponent } from "../page";
 import SearchedStudentComponent from "@/components/searchedStudent";
 import { useSelector } from "react-redux";

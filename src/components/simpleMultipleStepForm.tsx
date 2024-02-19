@@ -22,10 +22,9 @@ import {
 } from "@/components/ui/alert-dialog";
 import { HashSpinner } from "@/components/loader";
 import { useRouter } from "next/navigation";
-import { OnSelectSectionComponent } from "@/app/dashboard/admission/page";
+import OnSelectSectionComponent from "@/components/selectedSection";
 import useAxios from "@/hooks/useAxios";
 import { SignupStudemtUrl } from "@/utils/network";
-import { sign } from "crypto";
 
 function SimpleMultipleStepForm() {
   const router = useRouter();

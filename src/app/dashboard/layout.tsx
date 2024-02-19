@@ -13,7 +13,6 @@ import styled from "styled-components";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { GiPadlock } from "react-icons/gi";
-import { TbDoorExit } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
 import { FaSearch } from "react-icons/fa";
 import HeaderDashboard from "../../components/dashBoardHeader";

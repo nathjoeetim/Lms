@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useEffect, useState } from "react";
-import { OnSelectSectionComponent } from "../admission/page";
+import OnSelectSectionComponent from "@/components/selectedSection";
 import { SubTitleComponent } from "../page";
 import SelectedDepartmentCourse from "@/components/selectedCourses";
 import { useSelector } from "react-redux";

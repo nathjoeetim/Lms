@@ -7,7 +7,6 @@ import AcademicsSubContent from "./sideSubComponent/academicsSubContent";
 import ResultSubComponent from "./sideSubComponent/resultSubComponent";
 import FinanceSubComponent from "./sideSubComponent/financeSubComponent";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 
 interface SubSideBarProps {

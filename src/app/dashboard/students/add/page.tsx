@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { DepartmentType } from "@/utils/types";
 import useInputValidator, { isEmail, isNotEmpty } from "@/screens/inputAuth";
 import { SubTitleComponent } from "@/app/dashboard/page";
-import { OnSelectSectionComponent } from "../../admission/page";
+import OnSelectSectionComponent from "@/components/selectedSection";
 
 function EnrollStudentComponent() {
   const [selectedCountry, setSelectedCountry] = useState<string>("");

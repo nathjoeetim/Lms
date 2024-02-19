@@ -3,14 +3,7 @@
 import { Card } from "@/components/ui/card";
 import React, { useEffect, useState } from "react";
 import { IoFilterOutline } from "react-icons/io5";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  SelectGroup,
-} from "@/components/ui/select";
+
 import {
   Table,
   TableBody,
@@ -26,12 +19,7 @@ import { useSelector } from "react-redux";
 import { FetchData } from "@/redux/fetchCurrentUserData";
 import { useDispatch } from "react-redux";
 import { DepartmentType } from "@/utils/types";
-
-export type OptionAlieses = {
-  placeHolder: string;
-  options: string[];
-  onGetSelectedValueHandeler: (selectedValue: string) => void;
-};
+import OnSelectSectionComponent from "@/components/selectedSection";
 
 type TableAlises = {
   regNumber: string | any;
@@ -170,40 +158,6 @@ function AdmissionComponent() {
 }
 
 export default AdmissionComponent;
-
-export function OnSelectSectionComponent({
-  options,
-  placeHolder,
-  onGetSelectedValueHandeler,
-}: OptionAlieses) {
-  // State to store the selected value
-  const [selectedValue, setSelectedValue] = useState<string>("");
-
-  // Event handler for when the value changes
-  const handleSelectChange = (value: string) => {
-    setSelectedValue(value);
-    onGetSelectedValueHandeler(value);
-  };
-
-  return (
-    <Select value={selectedValue} onValueChange={handleSelectChange}>
-      <SelectTrigger className=" w-full text-[.8rem] flex flex-row items-center">
-        <SelectValue placeholder={placeHolder} />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {options.map((data, index) => {
-            return (
-              <SelectItem key={index} value={data}>
-                {data}
-              </SelectItem>
-            );
-          })}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-  );
-}
 
 export function DataTable({
   header,

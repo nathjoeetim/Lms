@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { OnSelectSectionComponent } from "../../admission/page";
+import OnSelectSectionComponent from "@/components/selectedSection";
 import { DepartmentType } from "@/utils/types";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
