@@ -30,7 +30,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export function DataTableDemo({ data, columns }: any) {
+function DataTableDemo({ data, columns }: any) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -57,8 +57,6 @@ export function DataTableDemo({ data, columns }: any) {
       rowSelection,
     },
   });
-
-  console.log(table);
 
   return (
     <div className="w-full">
@@ -173,3 +171,5 @@ export function DataTableDemo({ data, columns }: any) {
     </div>
   );
 }
+
+export default DataTableDemo;

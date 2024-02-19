@@ -6,8 +6,6 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { FetchData } from "@/redux/fetchCurrentUserData";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@radix-ui/react-label";
 
 function ImportContentField() {
   const getDepartmentHandeler: DepartmentType[] = useSelector(

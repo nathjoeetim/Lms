@@ -1,6 +1,6 @@
 "use client";
 import { Card } from "@/components/ui/card";
-import { DataTableDemo } from "@/components/selectableTable";
+import DataTableDemo from "@/components/selectableTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -291,17 +291,6 @@ function AddDepartmentAlertDialog() {
 
     if (isValid) {
       console.log("form is valid");
-
-      // const response = await axiosHandler<addDepartmentSheme>(
-      //   AddDepartmentURL,
-      //   "POST",
-      //   data
-      // );
-      // if (response) {
-      //   console.log("created");
-      // } else {
-      //   console.log("failed");
-      // }
     }
   }
 

@@ -13,10 +13,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DataTableDemo } from "@/components/selectableTable";
+import DataTableDemo from "@/components/selectableTable";
 import { DepartmentType } from "@/utils/types";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
+// import { useEffect } from "react";
+// import { useSelector } from "react-redux";
 
 const columns: ColumnDef<DepartmentType>[] = [
   {

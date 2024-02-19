@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { DataTableDemo } from "@/components/selectableTable";
+import DataTableDemo from "@/components/selectableTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -33,7 +33,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { OnSelectSectionComponent } from "@/app/dashboard/admission/page";
 import useAxios from "@/hooks/useAxios";
 import { FacultyType } from "@/utils/types";
 import { useDispatch, useSelector } from "react-redux";
