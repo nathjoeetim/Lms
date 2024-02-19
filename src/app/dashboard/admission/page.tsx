@@ -3,16 +3,6 @@
 import { Card } from "@/components/ui/card";
 import React, { useEffect, useState } from "react";
 import { IoFilterOutline } from "react-icons/io5";
-
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { SubTitleComponent } from "../page";
 import { useSelector } from "react-redux";
@@ -20,6 +10,7 @@ import { FetchData } from "@/redux/fetchCurrentUserData";
 import { useDispatch } from "react-redux";
 import { DepartmentType } from "@/utils/types";
 import OnSelectSectionComponent from "@/components/selectedSection";
+import DataTable from "@/components/dataTake";
 
 type TableAlises = {
   regNumber: string | any;
@@ -158,39 +149,3 @@ function AdmissionComponent() {
 }
 
 export default AdmissionComponent;
-
-export function DataTable({
-  header,
-  tableContent: tableData,
-}: {
-  header: TableHeaderAlises;
-  tableContent: TableAlises[];
-}) {
-  return (
-    <Table>
-      {/* <TableCaption>A list of applications.</TableCaption> */}
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[200px]">{header.RegNumber}</TableHead>
-          <TableHead>{header.semester}</TableHead>
-          <TableHead>{header.section}</TableHead>
-          <TableHead>{header.purpose}</TableHead>
-          <TableHead className="text-right">{header.amount}</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {tableData.map((element, index) => {
-          return (
-            <TableRow key={index}>
-              <TableCell className="font-medium">{element.regNumber}</TableCell>
-              <TableCell>{element.semester}</TableCell>
-              <TableCell>{element.section}</TableCell>
-              <TableCell>{element.applicationReason}</TableCell>
-              <TableCell className="text-right">{element.amount}</TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
-  );
-}
