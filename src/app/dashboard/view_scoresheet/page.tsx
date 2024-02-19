@@ -9,11 +9,13 @@ import { useSelector } from "react-redux";
 import { FetchData } from "@/redux/fetchCurrentUserData";
 import { useDispatch } from "react-redux";
 import { DepartmentType } from "@/utils/types";
+import { useRouter } from "next/navigation";
 
 function ExamsResultComponent() {
   const getDepartmentHandeler: DepartmentType[] = useSelector(
     (store: any) => store.currentUserGetter.allDepartment
   );
+  const router = useRouter();
   const dispatch = useDispatch();
   const [selectedSectionValue, setSelectedSectionValue] = useState<string>();
   const [selectedDepartmentValue, setselectedDepartmentValue] =
@@ -30,13 +32,13 @@ function ExamsResultComponent() {
   const [batch, _setBatch] = useState<string[]>(["Batch A", "Batch B"]);
 
   useEffect(() => {
-    FetchData(dispatch);
+    FetchData(dispatch, router);
 
     const allDepartment = getDepartmentHandeler.map(
       (data: DepartmentType) => data.name
     );
     setDepartment(allDepartment);
-  }, [dispatch, getDepartmentHandeler]);
+  }, [dispatch, getDepartmentHandeler, router]);
 
   return (
     <div className="flex flex-col gap-4">

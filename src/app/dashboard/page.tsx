@@ -21,7 +21,7 @@ function DashBoardComponent() {
   useEffect(() => {
     if (localStorage.getItem(auth_token)) {
       console.log("auth_token exists");
-      FetchData(dispatch);
+      FetchData(dispatch, router);
       return;
     } else {
       console.log("auth_token does not exist");

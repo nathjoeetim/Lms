@@ -42,7 +42,7 @@ function CoursesComponent() {
       const departmentName = allDepartment.map(
         (data: DepartmentType) => data.name
       );
-      FetchData(dispatch);
+      FetchData(dispatch, router);
       setDepartment(departmentName);
     } else {
       router.push("/login");

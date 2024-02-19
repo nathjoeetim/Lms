@@ -15,6 +15,7 @@ import { DepartmentType } from "@/utils/types";
 import useInputValidator, { isEmail, isNotEmpty } from "@/screens/inputAuth";
 import SubTitleComponent from "@/components/subTitle";
 import OnSelectSectionComponent from "@/components/selectedSection";
+import { useRouter } from "next/navigation";
 
 function EnrollStudentComponent() {
   const [selectedCountry, setSelectedCountry] = useState<string>("");
@@ -22,10 +23,11 @@ function EnrollStudentComponent() {
     (store: any) => store.currentUserGetter.allDepartment
   );
   const dispatch = useDispatch();
+  const router = useRouter();
   const [countries, setCountries] = useState([]);
 
   useEffect(() => {
-    FetchData(dispatch);
+    FetchData(dispatch, router);
 
     const allDepartment = getDepartmentHandeler.map(
       (data: DepartmentType) => data.name
@@ -48,7 +50,7 @@ function EnrollStudentComponent() {
     };
 
     fetchCountryData();
-  }, [dispatch, getDepartmentHandeler]);
+  }, [dispatch, getDepartmentHandeler, router]);
 
   const [imageIsSet, setImage] = useState<boolean>(false);
   const [imagePath, setImagePath] = useState<string | ArrayBuffer>("");

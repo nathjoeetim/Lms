@@ -163,7 +163,7 @@ function DepartmentComponent() {
 
   useEffect(() => {
     if (localStorage.getItem(auth_token)) {
-      FetchData(dispatch).then(() => setDepartment(allDepartmentData));
+      FetchData(dispatch, router).then(() => setDepartment(allDepartmentData));
     } else {
       router.push("/login");
     }
@@ -209,7 +209,7 @@ function DepartmentComponent() {
 export default DepartmentComponent;
 
 function AddDepartmentAlertDialog() {
-  const { axiosHandler } = useAxios();
+  const router = useRouter();
   const dispatch = useDispatch();
   const allFaculties: FacultyType[] = useSelector(
     (store: any) => store.currentUserGetter.allFaculties
@@ -224,14 +224,14 @@ function AddDepartmentAlertDialog() {
   const [onSelectedHOD, setSelectedHOD] = useState<string>("");
   const [hodOption, setHodOption] = useState<string[]>([]);
   useEffect(() => {
-    FetchData(dispatch);
+    FetchData(dispatch, router);
     const allFacultiesName = allFaculties.map((data: FacultyType) => data.name);
     const allDepartmentLecturerName = allLecturers.map(
       (data: LecturerType) => data.user
     );
     setHodOption(allDepartmentLecturerName);
     setFaulty(allFacultiesName);
-  }, [allFaculties, allLecturers, dispatch]);
+  }, [allFaculties, allLecturers, dispatch, router]);
 
   const {
     inputState: deparetmentInputValue,

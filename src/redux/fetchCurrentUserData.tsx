@@ -16,6 +16,7 @@ import {
   StudentUrl,
 } from "@/utils/network";
 import useAxios from "@/hooks/useAxios";
+import { useRouter } from "next/navigation";
 
 const CurrentUserData = createSlice({
   name: "CurrentUser",
@@ -58,8 +59,8 @@ export const {
 } = CurrentUserData.actions;
 export default CurrentUserData;
 
-export async function FetchData(dispatch: Dispatch) {
-  const { axiosHandler } = useAxios();
+export async function FetchData(dispatch: Dispatch, router: any) {
+  const { axiosHandler } = useAxios(router);
 
   const response = await axiosHandler<UserType>(CurrentUser, "GET", null, true);
   const deptRequest = await axiosHandler<Department>(

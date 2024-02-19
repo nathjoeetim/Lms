@@ -11,6 +11,7 @@ import { DepartmentType } from "@/utils/types";
 import OnSelectSectionComponent from "@/components/selectedSection";
 import DataTable from "@/components/dataTake";
 import SubTitleComponent from "@/components/subTitle";
+import { useRouter } from "next/navigation";
 
 type TableAlises = {
   regNumber: string | any;
@@ -32,6 +33,7 @@ function AdmissionComponent() {
   const getDepartmentHandeler: DepartmentType[] = useSelector(
     (store: any) => store.currentUserGetter.allDepartment
   );
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const [options, _setOptions] = useState<string[]>([
@@ -55,13 +57,13 @@ function AdmissionComponent() {
   );
 
   useEffect(() => {
-    FetchData(dispatch);
+    FetchData(dispatch, router);
 
     const allDepartment = getDepartmentHandeler.map(
       (data: DepartmentType) => data.name
     );
     setDepartment(allDepartment);
-  }, [dispatch, getDepartmentHandeler]);
+  }, [dispatch, getDepartmentHandeler, router]);
 
   const header: TableHeaderAlises = {
     amount: "Amount(₦)",

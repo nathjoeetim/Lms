@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { FetchData } from "@/redux/fetchCurrentUserData";
 import { useDispatch } from "react-redux";
 import { DepartmentType, StudentType } from "@/utils/types";
+import { useRouter } from "next/navigation";
 
 function Student() {
   const getDepartmentHandeler: DepartmentType[] = useSelector(
@@ -19,9 +20,7 @@ function Student() {
   const getAllStudentHandeler: StudentType[] = useSelector(
     (store: any) => store.currentUserGetter.allStudents
   );
-
-  console.log(getAllStudentHandeler);
-
+  const router = useRouter();
   const dispatch = useDispatch();
   const [options, _setOptions] = useState<string[]>([
     "All",
@@ -40,13 +39,13 @@ function Student() {
   ]);
 
   useEffect(() => {
-    FetchData(dispatch);
+    FetchData(dispatch, router);
 
     const allDepartment = getDepartmentHandeler.map(
       (data: DepartmentType) => data.name
     );
     setDepartment(allDepartment);
-  }, [dispatch, getDepartmentHandeler]);
+  }, [dispatch, getDepartmentHandeler, router]);
 
   const [onselectedDepertmentValue, setSelectedDepartmentValue] = useState("");
   const [onselectedLevelValue, setSelectedLevelValue] = useState("All");

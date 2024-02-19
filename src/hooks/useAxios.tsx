@@ -6,9 +6,7 @@ import { auth_token, session_active } from "@/utils/constant";
 import { HandleLogOut } from "./useLogout";
 import { useRouter } from "next/navigation";
 
-export default function useAxios() {
-  const router = useRouter();
-  //   const { handleLogOut: logout } = useLogout();
+export default function useAxios(router: any) {
   async function axiosHandler<T, D = unknown>(
     url: string,
     method: string,

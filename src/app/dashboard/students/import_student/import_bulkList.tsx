@@ -6,11 +6,13 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { FetchData } from "@/redux/fetchCurrentUserData";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 
 function ImportContentField() {
   const getDepartmentHandeler: DepartmentType[] = useSelector(
     (store: any) => store.currentUserGetter.allDepartment
   );
+  const router = useRouter();
   const dispatch = useDispatch();
   const [department, setDepartment] = useState<string[]>([]);
   const [level, _setLevel] = useState<string[]>(["100", "200", "300", "400"]);
@@ -33,13 +35,13 @@ function ImportContentField() {
     useState<string>("");
 
   useEffect(() => {
-    FetchData(dispatch);
+    FetchData(dispatch, router);
 
     const allDepartment = getDepartmentHandeler.map(
       (data: DepartmentType) => data.name
     );
     setDepartment(allDepartment);
-  }, [dispatch, getDepartmentHandeler]);
+  }, [dispatch, getDepartmentHandeler, router]);
 
   return (
     <div className="flex flex-col items-center justify-start gap-9 w-full">

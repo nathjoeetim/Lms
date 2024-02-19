@@ -34,7 +34,7 @@ type LoginSchema = z.infer<typeof formSchema>;
 
 const Login = () => {
   const router = useRouter();
-  const { axiosHandler } = useAxios();
+  const { axiosHandler } = useAxios(router);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
 
   useEffect(() => {
@@ -68,8 +68,6 @@ const Login = () => {
       "post",
       loginData
     );
-
-    // console.log(response);
 
     if (response) {
       localStorage.setItem(auth_token, response.access_token);
