@@ -208,7 +208,7 @@ function DepartmentComponent() {
 
 export default DepartmentComponent;
 
-export function AddDepartmentAlertDialog() {
+function AddDepartmentAlertDialog() {
   const { axiosHandler } = useAxios();
   const dispatch = useDispatch();
   const allFaculties: FacultyType[] = useSelector(
