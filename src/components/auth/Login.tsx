@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,19 +13,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { z } from "zod";
-import axios from "axios";
-import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 
 import { useRouter } from "next/navigation";
-import { AdminLoginUrl, CurrentUser } from "@/utils/network";
+import { AdminLoginUrl } from "@/utils/network";
 import useAxios from "@/hooks/useAxios";
 import { SignInResponseType } from "@/utils/types";
-import Link from 'next/link';
+import Link from "next/link";
 import { auth_token, session_active } from "@/utils/constant";
-
+import { ScaleSpinner } from "../loader";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -36,7 +34,17 @@ type LoginSchema = z.infer<typeof formSchema>;
 
 const Login = () => {
   const router = useRouter();
-  const { axiosHandler } = useAxios()
+  const { axiosHandler } = useAxios();
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
+
+  useEffect(() => {
+    // Check if the user is already authenticated
+    if (localStorage.getItem(auth_token)) {
+      // If the access token exists, redirect to the dashboard
+      router.replace("/dashboard");
+    }
+  }, [router]);
+
   const {
     register,
     handleSubmit,
@@ -49,26 +57,30 @@ const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const onSubmit = async (data: LoginSchema) => {
-
+    setIsLoading(true);
     const loginData = {
       email: data.email,
       password: data.password,
-    }
+    };
 
-    const response = await axiosHandler<SignInResponseType, typeof loginData>(AdminLoginUrl, "post", loginData)
+    const response = await axiosHandler<SignInResponseType, typeof loginData>(
+      AdminLoginUrl,
+      "post",
+      loginData
+    );
 
     // console.log(response);
 
     if (response) {
-      localStorage.setItem(auth_token, response.access_token)
-      localStorage.removeItem(session_active)
-
+      localStorage.setItem(auth_token, response.access_token);
+      localStorage.removeItem(session_active);
       // redirect to dashboard
-      router.push("/dashboard");
+      router.replace("/dashboard");
     }
-    
+
     reset();
-  }
+    setIsLoading(false);
+  };
   return (
     <Card className="w-[350px] md:w-[450px]">
       <CardHeader>
@@ -113,13 +125,13 @@ const Login = () => {
         </CardContent>
         <CardFooter className="w-full flex flex-col">
           <div className="w-full">
-            <Button
-              className="w-full"
-              type="submit"
-              disabled={isSubmitting}
-            >
-              Login
-            </Button>
+            {isLoading ? (
+              <ScaleSpinner />
+            ) : (
+              <Button className="w-full" type="submit" disabled={isSubmitting}>
+                Login
+              </Button>
+            )}
           </div>
           <div className="flex flex-row-reverse items-start justify-between w-full">
             <div className="w-full flex justify-end mt-5">

@@ -9,16 +9,28 @@ import { MdAddCircle } from "react-icons/md";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
+import { FetchData } from "@/redux/fetchCurrentUserData";
+import { useDispatch } from "react-redux";
+import { DepartmentType } from "@/utils/types";
 import useInputValidator, { isEmail, isNotEmpty } from "@/screens/inputAuth";
 import { SubTitleComponent } from "@/app/dashboard/page";
-import { InnerOptions, OnSelectSectionComponent } from "../../admission/page";
+import { OnSelectSectionComponent } from "../../admission/page";
 
 function EnrollStudentComponent() {
   const [selectedCountry, setSelectedCountry] = useState<string>("");
-
-  const [countries, setCountries] = useState<InnerOptions[]>([]);
+  const getDepartmentHandeler: DepartmentType[] = useSelector(
+    (store: any) => store.currentUserGetter.allDepartment
+  );
+  const dispatch = useDispatch();
+  const [countries, setCountries] = useState([]);
 
   useEffect(() => {
+    FetchData(dispatch);
+
+    const allDepartment = getDepartmentHandeler.map(
+      (data: DepartmentType) => data.name
+    );
+    setDepartment(allDepartment);
     const fetchCountryData = async () => {
       try {
         const response = await fetch("https://restcountries.com/v3.1/all");
@@ -36,72 +48,26 @@ function EnrollStudentComponent() {
     };
 
     fetchCountryData();
-  }, []);
-
-  console.log(countries);
+  }, [dispatch, getDepartmentHandeler]);
 
   const [imageIsSet, setImage] = useState<boolean>(false);
   const [imagePath, setImagePath] = useState<string | ArrayBuffer>("");
-  const [gender, _setGender] = useState<InnerOptions[]>([
-    { content: "Male" },
-    { content: "Female" },
-  ]);
-  const [department, _setDepartment] = useState<InnerOptions[]>([
-    {
-      content: "Business Management ",
-    },
-    {
-      content: "Law",
-    },
-    {
-      content: "Political Sci",
-    },
-    {
-      content: "Music",
-    },
-    {
-      content: "Clinical Sci",
-    },
-    {
-      content: "Computer Engr.",
-    },
-  ]);
-  const [level, _setLevel] = useState<InnerOptions[]>([
-    {
-      content: "100",
-    },
-    {
-      content: "200",
-    },
-    {
-      content: "300",
-    },
-    {
-      content: "400",
-    },
-  ]);
-  const [genotype, setGenotype] = useState<InnerOptions[]>([
-    {
-      content: "AA",
-    },
-    {
-      content: "AS",
-    },
-    {
-      content: "SS",
-    },
-    {
-      content: "AC",
-    },
-    {
-      content: "SC",
-    },
+  const [gender, _setGender] = useState<string[]>(["Male", "Female"]);
+  const [department, setDepartment] = useState<string[]>([]);
+  const [level, _setLevel] = useState<string[]>(["100", "200", "300", "400"]);
+  const [genotype, setGenotype] = useState<string[]>([
+    "AA",
+    "AS",
+    "SS",
+    "AC",
+    "SC",
   ]);
   const [selectedGenoType, setSelectedGenotype] = useState<string>("");
   const [departmentValue, setSelectedDepartment] = useState<string>("");
   const [levelValue, setSelectedLevel] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState<string>("");
   const [formIndex, setFormIndex] = useState(1);
+
   function onSetSelectedHandelerFn(value: string) {
     setSelectedGender(value);
   }

@@ -1,6 +1,5 @@
 "use client";
 import Login from "@/components/auth/Login";
-import React, { useState } from "react";
 
 type Props = {};
 

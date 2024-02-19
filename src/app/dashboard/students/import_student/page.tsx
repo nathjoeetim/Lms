@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BiCloudDownload } from "react-icons/bi";
 import { SubTitleComponent } from "@/app/dashboard/page";
+import ImportContentField from "./import_bulkList";
 
 function BulkImportEnrolment() {
   return (
@@ -46,13 +47,15 @@ function BulkImportEnrolment() {
           </div>
         </Card>
       </div>
-      <Card className="relative flex flex-col justify-start items-start w-[97%] mx-auto transition-height duration-300 gap-4 h-fit">
-        <div className="flex flex-col items-start gap-3 border-b border-b-slate-400 pb-1 w-full p-4 h-[100px] box-border">
+      <Card className="relative flex flex-col justify-start items-start w-[97%] mx-auto transition-height duration-300 gap-4 h-fit mb-3">
+        <div className="flex flex-col items-start gap-3 border-b border-b-slate-400 pb-3 w-full p-4 box-border">
           <h5 className="font-normal text-xl">
             Students Bulk Enroll - Import List
           </h5>
         </div>
-        <div className="flex flex-row p-3"></div>
+        <div className="flex flex-row p-3">
+          <ImportContentField />
+        </div>
       </Card>
     </div>
   );

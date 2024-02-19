@@ -13,7 +13,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ChevronDown } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -31,20 +30,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export type TableContentAliese = {
-  id: string;
-  number: number;
-  name: string;
-  status: "Bsc" | "Btech" | "Dr." | 70 | 100 |60;
-  leader_name: string;
-};
-
-type TableAlieses = {
-  data: TableContentAliese[];
-  columns: ColumnDef<TableContentAliese>[];
-};
-
-export function DataTableDemo({ data, columns }: TableAlieses) {
+export function DataTableDemo({ data, columns }: any) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -71,6 +57,8 @@ export function DataTableDemo({ data, columns }: TableAlieses) {
       rowSelection,
     },
   });
+
+  console.log(table);
 
   return (
     <div className="w-full">
@@ -129,8 +117,8 @@ export function DataTableDemo({ data, columns }: TableAlieses) {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map(row => (
+            {table?.getRowModel()?.rows?.length ? (
+              table.getRowModel().rows?.map(row => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}

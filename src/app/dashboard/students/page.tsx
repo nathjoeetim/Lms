@@ -1,7 +1,7 @@
 "use client";
 import { IoFilterOutline } from "react-icons/io5";
 import { Card } from "@/components/ui/card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,76 +15,63 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { InnerOptions, OnSelectSectionComponent } from "../admission/page";
+import { OnSelectSectionComponent } from "../admission/page";
 import { SubTitleComponent } from "../page";
 import SearchedStudentComponent from "@/components/searchedStudent";
+import { useSelector } from "react-redux";
+import { FetchData } from "@/redux/fetchCurrentUserData";
+import { useDispatch } from "react-redux";
+import { DepartmentType, StudentType } from "@/utils/types";
 
 function Student() {
-  const [options, _setOptions] = useState<InnerOptions[]>([
-    {
-      content: "All",
-    },
-    {
-      content: "100",
-    },
-    {
-      content: "200",
-    },
-    {
-      content: "300",
-    },
-    {
-      content: "400",
-    },
+  const getDepartmentHandeler: DepartmentType[] = useSelector(
+    (store: any) => store.currentUserGetter.allDepartment
+  );
+  const getAllStudentHandeler: StudentType[] = useSelector(
+    (store: any) => store.currentUserGetter.allStudents
+  );
+
+  console.log(getAllStudentHandeler);
+
+  const dispatch = useDispatch();
+  const [options, _setOptions] = useState<string[]>([
+    "All",
+    "100",
+    "200",
+    "300",
+    "400",
   ]);
-  const [department, _setDepartment] = useState<InnerOptions[]>([
-    {
-      content: "Business Management ",
-    },
-    {
-      content: "Law",
-    },
-    {
-      content: "Political Sci",
-    },
-    {
-      content: "Music",
-    },
-    {
-      content: "Clinical Sci",
-    },
-    {
-      content: "Computer Engr.",
-    },
-  ]);
-  const [status, _setBatch] = useState<InnerOptions[]>([
-    {
-      content: "All",
-    },
-    {
-      content: "Active",
-    },
-    {
-      content: "InActive",
-    },
-  ]);
-  const [program, _setProgram] = useState<InnerOptions[]>([
-    {
-      content: "All",
-    },
-    {
-      content: "Under-Graduate",
-    },
-    {
-      content: "Post-Graduate",
-    },
+  const [department, setDepartment] = useState<string[]>([]);
+
+  const [status, _setBatch] = useState<string[]>(["All", "Active", "InActive"]);
+  const [program, _setProgram] = useState<string[]>([
+    "All",
+    "Under-Graduate",
+    "Post-Graduate",
   ]);
 
-  const [onselectedDepertmentValue, setSelectedDepartmentValue] =
-    useState("All");
+  useEffect(() => {
+    FetchData(dispatch);
+
+    const allDepartment = getDepartmentHandeler.map(
+      (data: DepartmentType) => data.name
+    );
+    setDepartment(allDepartment);
+  }, [dispatch, getDepartmentHandeler]);
+
+  const [onselectedDepertmentValue, setSelectedDepartmentValue] = useState("");
   const [onselectedLevelValue, setSelectedLevelValue] = useState("All");
   const [onselectedStatusValue, setSelectedStatusValue] = useState("All");
   const [onselectedProgramValue, setSelectedProgramValue] = useState("All");
+
+  // const studentInSelectedDepartment = getAllStudentHandeler.map(element => {
+  //   const trimesStudentDepartment = element.student_department
+  //     .replace(/\((.*?)\)/g, "")
+  //     .trim();
+  //   return trimesStudentDepartment === onselectedDepertmentValue;
+  // });
+
+  // console.log(studentInSelectedDepartment);
 
   return (
     <div className="w-full flex flex-col items-start   gap-4  overflow-y-scroll overflow-x-hidden custom-scrollbar  box-border">

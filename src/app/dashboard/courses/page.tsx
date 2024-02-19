@@ -7,66 +7,71 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useState } from "react";
-import { InnerOptions, OnSelectSectionComponent } from "../admission/page";
+import { useEffect, useState } from "react";
+import { OnSelectSectionComponent } from "../admission/page";
 import { SubTitleComponent } from "../page";
 import SelectedDepartmentCourse from "@/components/selectedCourses";
+import { useSelector } from "react-redux";
+import { auth_token } from "@/utils/constant";
+import { FetchData } from "@/redux/fetchCurrentUserData";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import { DepartmentType } from "@/utils/types";
 
 function CoursesComponent() {
-  const [level, _setLevels] = useState<InnerOptions[]>([
-    {
-      content: "All",
-    },
-    {
-      content: "100",
-    },
-    {
-      content: "200",
-    },
-    {
-      content: "300",
-    },
-    {
-      content: "400",
-    },
-  ]);
-  const [department, _setDepartment] = useState<InnerOptions[]>([
-    {
-      content: "Business Management ",
-    },
-    {
-      content: "Law",
-    },
-    {
-      content: "Political Sci",
-    },
-    {
-      content: "Music",
-    },
-    {
-      content: "Clinical Sci",
-    },
-    {
-      content: "Computer Engr.",
-    },
+  const allDepartment: DepartmentType[] = useSelector(
+    (store: any) => store.currentUserGetter.allDepartment
+  );
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [level, _setLevels] = useState<string[]>(["All"]);
+  const [department, setDepartment] = useState<string[]>([]);
+  const [determineSemester, setDeterminedSemester] = useState<string[]>([
+    "All",
   ]);
   const [sessionValue, setSectionValue] = useState<string>("");
   const [selectedDepartment, setSelectedDepartment] = useState<string>("");
   const [selectedStatusValue, setSelectedStatusValue] = useState<string>("");
-  const [determineSemester, setDeterminedSemester] = useState<InnerOptions[]>([
-    {
-      content: "All",
-    },
-    {
-      content: "First Semester",
-    },
-    {
-      content: "Semester Semester",
-    },
+  const [isDepartmentSelected, setDepartmentSelected] =
+    useState<Boolean>(false);
+  const [selectedDetailedValue, setSelectedDetailValue] =
+    useState<DepartmentType | null>(null);
+
+  useEffect(() => {
+    if (localStorage.getItem(auth_token)) {
+      const departmentName = allDepartment.map(
+        (data: DepartmentType) => data.name
+      );
+      FetchData(dispatch);
+      setDepartment(departmentName);
+    } else {
+      router.push("/login");
+    }
+    setSelectedStatusValue("All");
+    setSectionValue("All");
+    setDepartmentSelected(selectedDepartment.trim() !== "");
+
+    if (isDepartmentSelected) {
+      const getSelectedDepartmentDetails = allDepartment.find(
+        (data: DepartmentType) => data.name === selectedDepartment
+      );
+      if (getSelectedDepartmentDetails) {
+        setSelectedDetailValue(getSelectedDepartmentDetails!);
+      }
+    } else {
+      setSelectedDetailValue(null);
+    }
+
+    //
+  }, [
+    allDepartment,
+    dispatch,
+    router,
+    selectedDepartment,
+    isDepartmentSelected,
   ]);
 
-  // not by dfault the value will be All 
-
+  console.log(selectedDetailedValue);
   return (
     <div className="flex flex-col gap-4 overflow-y-scroll overflow-x-hidden custom-scrollbar ">
       <SubTitleComponent
@@ -88,7 +93,7 @@ function CoursesComponent() {
             <AccordionContent>
               <div className="flex flex-rol items-center justify-start gap-3  w-full p-4 box-border">
                 <div className="w-[100%] flex flex-row items-center gap-4 justify-between">
-                  <div className="flex flex-col items-start text-slate-500">
+                  <div className="flex flex-col items-start text-slate-500 w-[200px]">
                     <h4 className="text-[.8rem] font-semibold ">
                       Department Option
                     </h4>
@@ -98,7 +103,7 @@ function CoursesComponent() {
                       onGetSelectedValueHandeler={setSelectedDepartment}
                     />
                   </div>
-                  <div className="flex flex-col items-start text-slate-500">
+                  <div className="flex flex-col items-start text-slate-500 w-[150px]">
                     <h4 className="text-[.8rem] font-semibold">Level</h4>
                     <OnSelectSectionComponent
                       placeHolder="Level"
@@ -106,7 +111,7 @@ function CoursesComponent() {
                       onGetSelectedValueHandeler={setSectionValue}
                     />
                   </div>{" "}
-                  <div className="flex flex-col items-start text-slate-500">
+                  <div className="flex flex-col items-start text-slate-500 w-[180px]">
                     <h4 className="text-[.8rem] font-semibold">Semester</h4>
                     <OnSelectSectionComponent
                       options={determineSemester}
@@ -121,7 +126,9 @@ function CoursesComponent() {
         </Accordion>
       </Card>
       <div className="w-full">
-        <SelectedDepartmentCourse />
+        {isDepartmentSelected && (
+          <SelectedDepartmentCourse deptCourse={selectedDetailedValue!} />
+        )}
       </div>
     </div>
   );

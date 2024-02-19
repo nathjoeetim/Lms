@@ -1,9 +1,6 @@
 "use client";
 import { Card } from "@/components/ui/card";
-import {
-  DataTableDemo,
-  TableContentAliese,
-} from "@/components/selectableTable";
+import { DataTableDemo } from "@/components/selectableTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -34,51 +31,22 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { InnerOptions, OnSelectSectionComponent } from "../admission/page";
-import { useState } from "react";
+import { OnSelectSectionComponent } from "../admission/page";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { SubTitleComponent } from "../page";
 import FacultyComponent from "@/components/facultyTable";
+import { useDispatch } from "react-redux";
+import { FetchData } from "@/redux/fetchCurrentUserData";
+import { useSelector } from "react-redux";
+import { DepartmentType, FacultyType, LecturerType } from "@/utils/types";
+import useInputValidator, { isNotEmpty } from "@/screens/inputAuth";
+import { auth_token } from "@/utils/constant";
+import { useRouter } from "next/navigation";
+import useAxios from "@/hooks/useAxios";
+import { AddDepartmentURL } from "@/utils/network";
 
-const data: TableContentAliese[] = [
-  {
-    id: "m5gr84i9",
-    number: 316,
-    name: "Clinical Sci",
-    status: "Bsc",
-    leader_name: "Sifon David",
-  },
-  {
-    id: "3u1reuv4",
-    number: 242,
-    name: "Law",
-    status: "Bsc",
-    leader_name: "Uwana David",
-  },
-  {
-    id: "derv1ws0",
-    name: "Buiness Mgt",
-    number: 837,
-    status: "Bsc",
-    leader_name: "Richard Friday",
-  },
-  {
-    id: "5kma53ae",
-    name: "Agric Sci",
-    number: 874,
-    status: "Bsc",
-    leader_name: "Solomon Samuel",
-  },
-  {
-    id: "bhqecj4p",
-    number: 721,
-    name: "Med Lab",
-    status: "Bsc",
-    leader_name: "Nse-Obong Friday",
-  },
-];
-
-const columns: ColumnDef<TableContentAliese>[] = [
+const columns: ColumnDef<DepartmentType>[] = [
   {
     id: "select",
     // useServer
@@ -105,10 +73,10 @@ const columns: ColumnDef<TableContentAliese>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
+    accessorKey: "qualification",
     header: "Qualification",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("qualification")}</div>
     ),
   },
   {
@@ -127,7 +95,7 @@ const columns: ColumnDef<TableContentAliese>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "leader_name",
+    accessorKey: "department_head",
     header: ({ column }) => {
       return (
         <Button
@@ -140,23 +108,17 @@ const columns: ColumnDef<TableContentAliese>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("leader_name")}</div>
+      <div className="lowercase">{row.getValue("department_head")}</div>
     ),
   },
   {
-    accessorKey: "number",
+    accessorKey: "short_name",
     header: () => <div className="text-left">No. of Student</div>,
     cell: ({ row }) => {
-      const amount = row.getValue("number");
-
-      // // Format the amount as a dollar amount
-      // const formatted = new Intl.NumberFormat("en-US", {
-      //   style: "currency",
-      //   currency: "USD",
-      // }).format(amount);
-
       return (
-        <div className="text-left font-medium">{row.getValue("number")}</div>
+        <div className="text-left font-medium">
+          {row.getValue("short_name")}
+        </div>
       );
     },
   },
@@ -164,8 +126,6 @@ const columns: ColumnDef<TableContentAliese>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const TableContentAlieses = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -178,7 +138,7 @@ const columns: ColumnDef<TableContentAliese>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() =>
-                navigator.clipboard.writeText(TableContentAlieses.leader_name)
+                navigator.clipboard.writeText(row.original.department_head)
               }
             >
               Copy HOD name
@@ -194,6 +154,21 @@ const columns: ColumnDef<TableContentAliese>[] = [
 ];
 
 function DepartmentComponent() {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const allDepartmentData = useSelector(
+    (store: any) => store.currentUserGetter.allDepartment
+  );
+  const [department, setDepartment] = useState<DepartmentType[]>([]);
+
+  useEffect(() => {
+    if (localStorage.getItem(auth_token)) {
+      FetchData(dispatch).then(() => setDepartment(allDepartmentData));
+    } else {
+      router.push("/login");
+    }
+  });
+
   return (
     <div className="flex flex-col gap-4 overflow-y-scroll overflow-x-hidden custom-scrollbar">
       <SubTitleComponent
@@ -220,7 +195,7 @@ function DepartmentComponent() {
                 </h5>
               </div>
               <div className="p-3 w-full">
-                <DataTableDemo columns={columns} data={data} />
+                <DataTableDemo columns={columns} data={department} />
               </div>
             </AccordionContent>
           </AccordionItem>
@@ -234,28 +209,102 @@ function DepartmentComponent() {
 export default DepartmentComponent;
 
 export function AddDepartmentAlertDialog() {
-  const [onSelectedFaculty, setSelectedFaculty] = useState<string>("");
+  const { axiosHandler } = useAxios();
+  const dispatch = useDispatch();
+  const allFaculties: FacultyType[] = useSelector(
+    (store: any) => store.currentUserGetter.allFaculties
+  );
+
+  const allLecturers: LecturerType[] = useSelector(
+    (store: any) => store.currentUserGetter.allLectures
+  );
+
+  const [inSelectedFaculty, setSelectedFaculty] = useState<string>("All");
+  const [faulty, setFaulty] = useState<string[]>([]);
   const [onSelectedHOD, setSelectedHOD] = useState<string>("");
-  const facultyOption: InnerOptions[] = [
-    {
-      content: "Management Science",
-    },
-    {
-      content: "Law",
-    },
-    {
-      content: "Clinical Science",
-    },
-  ];  
-  const Staff: InnerOptions[] = [
-    {
-      content: "SAMUEL",
-    },
-    {
-      content: "Ubong",
-    },
- 
-  ];
+  const [hodOption, setHodOption] = useState<string[]>([]);
+  useEffect(() => {
+    FetchData(dispatch);
+    const allFacultiesName = allFaculties.map((data: FacultyType) => data.name);
+    const allDepartmentLecturerName = allLecturers.map(
+      (data: LecturerType) => data.user
+    );
+    setHodOption(allDepartmentLecturerName);
+    setFaulty(allFacultiesName);
+  }, [allFaculties, allLecturers, dispatch]);
+
+  const {
+    inputState: deparetmentInputValue,
+    onChangeHandlerFn: departmentHandelerFn,
+    inputIsBlur: departmentIsTouched,
+    inputIsBlurFn: departmentIsBluredHanderFn,
+    inputIsValid: departmentIsValid,
+    hasNoError: departmentHasNoError,
+    clearInputValue: onClearDepartmentInputFn,
+  } = useInputValidator(isNotEmpty);
+
+  const {
+    inputState: durationInputValue,
+    onChangeHandlerFn: durationHandelerFn,
+    inputIsBlur: durationIsTouched,
+    inputIsBlurFn: durationIsBluredHanderFn,
+    inputIsValid: durationIsValid,
+    hasNoError: durationHasNoError,
+    clearInputValue: onCleardurationInputFn,
+  } = useInputValidator(isNotEmpty);
+
+  const {
+    inputState: qualificationInputValue,
+    onChangeHandlerFn: qualificationHandelerFn,
+    inputIsBlur: qualificationIsTouched,
+    inputIsBlurFn: qualificationIsBluredHanderFn,
+    inputIsValid: qualificationIsValid,
+    hasNoError: qualificationHasNoError,
+    clearInputValue: onClearqualificationInputFn,
+  } = useInputValidator(isNotEmpty);
+
+  type addDepartmentSheme = {
+    faculty_name: string;
+    duration: string;
+    deparment: string;
+    department_head: string;
+    qualification: string;
+    level: string;
+  };
+
+  const CreateDepartmentData: addDepartmentSheme = {
+    deparment: deparetmentInputValue,
+    department_head: onSelectedHOD,
+    duration: durationInputValue,
+    faculty_name: inSelectedFaculty,
+    qualification: qualificationInputValue,
+    level: "400 Level",
+  };
+
+  async function onSubmit(data: addDepartmentSheme) {
+    const isValid =
+      departmentIsValid &&
+      durationIsValid &&
+      qualificationIsValid &&
+      inSelectedFaculty.trim() !== "" &&
+      onSelectedHOD.trim() !== "";
+
+    if (isValid) {
+      console.log("form is valid");
+
+      // const response = await axiosHandler<addDepartmentSheme>(
+      //   AddDepartmentURL,
+      //   "POST",
+      //   data
+      // );
+      // if (response) {
+      //   console.log("created");
+      // } else {
+      //   console.log("failed");
+      // }
+    }
+  }
+
   return (
     <AlertDialog>
       <AlertDialogTrigger>Add Department</AlertDialogTrigger>
@@ -275,7 +324,7 @@ export function AddDepartmentAlertDialog() {
                 </h4>
                 <OnSelectSectionComponent
                   placeHolder="Select Faculty"
-                  options={facultyOption}
+                  options={faulty}
                   onGetSelectedValueHandeler={setSelectedFaculty}
                 />
               </div>
@@ -283,7 +332,12 @@ export function AddDepartmentAlertDialog() {
                 <h4 className="text-base font-semibold text-gray-800">
                   Name Of Department
                 </h4>
-                <Input placeholder="Department name" />
+                <Input
+                  placeholder="Department name"
+                  value={deparetmentInputValue}
+                  onChange={departmentHandelerFn}
+                  onBlur={departmentIsBluredHanderFn}
+                />
               </div>
               <div className="flex flex-row items-center justify-start gap-4">
                 <div className="flex flex-col items-start justify-start w-[30%] gap-0">
@@ -303,6 +357,9 @@ export function AddDepartmentAlertDialog() {
                   <Input
                     placeholder="E.g. 4 Years"
                     className="bg-transparent text-slate-700 outline-none focus:outline-none"
+                    value={durationInputValue}
+                    onChange={durationHandelerFn}
+                    onBlur={durationIsBluredHanderFn}
                   />
                 </div>
               </div>
@@ -310,7 +367,12 @@ export function AddDepartmentAlertDialog() {
                 <h4 className="text-base font-semibold text-gray-800">
                   Qualification
                 </h4>
-                <Input placeholder="E.g. Bachelor of Science (Bsc)" />
+                <Input
+                  placeholder="E.g. Bachelor of Science (Bsc)"
+                  value={qualificationInputValue}
+                  onChange={qualificationHandelerFn}
+                  onBlur={qualificationIsBluredHanderFn}
+                />
               </div>
               <div className="flex flex-col items-start justify-start w-[90%] gap-0">
                 <h4 className="text-base font-semibold text-gray-800">
@@ -318,7 +380,7 @@ export function AddDepartmentAlertDialog() {
                 </h4>
                 <OnSelectSectionComponent
                   placeHolder="Select Staff"
-                  options={Staff}
+                  options={hodOption}
                   onGetSelectedValueHandeler={setSelectedHOD}
                 />
               </div>
@@ -327,7 +389,9 @@ export function AddDepartmentAlertDialog() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={() => onSubmit(CreateDepartmentData)}>
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

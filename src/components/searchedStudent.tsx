@@ -10,8 +10,8 @@ type searchedStudentAliese = {
   userName: string;
   regNumber: string;
   link: string;
-  currectLevel : number | string;
-  program : string
+  currectLevel: number | string;
+  program: string;
 };
 
 function SearchedStudentComponent() {
@@ -24,7 +24,7 @@ function SearchedStudentComponent() {
       regNumber: "18/LW/18279",
       userName: "David Jonas",
       currectLevel: 300,
-      program: "Under-graduate"
+      program: "Under-graduate",
     },
     {
       imgSrc: image.src,
@@ -32,7 +32,7 @@ function SearchedStudentComponent() {
       regNumber: "17/LW/189",
       userName: "Musa Musa",
       currectLevel: 300,
-      program: "Post-Graduate"
+      program: "Post-Graduate",
     },
     {
       imgSrc: image.src,
@@ -40,7 +40,7 @@ function SearchedStudentComponent() {
       regNumber: "17/LW/189",
       userName: "Musa Samuel",
       currectLevel: 300,
-      program: "Under-Graduate"
+      program: "Under-Graduate",
     },
   ]);
   return (
@@ -65,10 +65,12 @@ function SearchedStudentComponent() {
               </div>
               <div>
                 <h5 className="font-semibold">
-                  current Level : <span className="font-normal">{element.currectLevel}</span>{" "}
+                  current Level :{" "}
+                  <span className="font-normal">{element.currectLevel}</span>{" "}
                 </h5>{" "}
                 <h5 className="font-semibold">
-                  Program : <span  className="font-normal">{element.program}</span>
+                  Program :{" "}
+                  <span className="font-normal">{element.program}</span>
                 </h5>
               </div>
             </div>

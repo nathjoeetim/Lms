@@ -1,7 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoFilterOutline } from "react-icons/io5";
 import {
   Select,
@@ -9,7 +9,6 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  SelectLabel,
   SelectGroup,
 } from "@/components/ui/select";
 import {
@@ -23,15 +22,15 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { SubTitleComponent } from "../page";
+import { useSelector } from "react-redux";
+import { FetchData } from "@/redux/fetchCurrentUserData";
+import { useDispatch } from "react-redux";
+import { DepartmentType } from "@/utils/types";
 
 export type OptionAlieses = {
   placeHolder: string;
-  options: InnerOptions[];
+  options: string[];
   onGetSelectedValueHandeler: (selectedValue: string) => void;
-};
-
-export type InnerOptions = {
-  content: string;
 };
 
 type TableAlises = {
@@ -51,65 +50,39 @@ type TableHeaderAlises = {
 };
 
 function AdmissionComponent() {
-  const [options, _setOptions] = useState<InnerOptions[]>([
-    {
-      content: "2019-2020",
-    },
-    {
-      content: "2020-2021",
-    },
-    {
-      content: "2021-2022",
-    },
-    {
-      content: "2022-2023",
-    },
-    {
-      content: "2023-2024",
-    },
+  const getDepartmentHandeler: DepartmentType[] = useSelector(
+    (store: any) => store.currentUserGetter.allDepartment
+  );
+  const dispatch = useDispatch();
+
+  const [options, _setOptions] = useState<string[]>([
+    "2019-2020",
+    "2020-2021",
+    "2021-2022",
+    "2022-2023",
+    "2023-2024",
   ]);
-  const [department, _setDepartment] = useState<InnerOptions[]>([
-    {
-      content: "Business Management ",
-    },
-    {
-      content: "Law",
-    },
-    {
-      content: "Political Sci",
-    },
-    {
-      content: "Music",
-    },
-    {
-      content: "Clinical Sci",
-    },
-    {
-      content: "Computer Engr.",
-    },
-  ]);
+  const [department, setDepartment] = useState<string[]>([]);
   const [sessionValue, setSectionValue] = useState<string>("");
   const [selectedDepartment, setSelectedDepartment] = useState<string>("");
   const [selectedStatusValue, setSelectedStatusValue] = useState<string>("");
-  const [determinedApplication, _setDeterminedApplication] = useState<
-    InnerOptions[]
-  >([
-    {
-      content: "All",
-    },
-    {
-      content: "Suspension of Studies",
-    },
-    {
-      content: "Change Of Course",
-    },
-    {
-      content: "Request For Transcript",
-    },
-    {
-      content: "Pending Approval",
-    },
-  ]);
+  const [determinedApplication, _setDeterminedApplication] = useState<string[]>(
+    [
+      "All",
+      "Suspension of Studies",
+      "Change Of Course",
+      "Request For Transcript",
+    ]
+  );
+
+  useEffect(() => {
+    FetchData(dispatch);
+
+    const allDepartment = getDepartmentHandeler.map(
+      (data: DepartmentType) => data.name
+    );
+    setDepartment(allDepartment);
+  }, [dispatch, getDepartmentHandeler]);
 
   const header: TableHeaderAlises = {
     amount: "Amount(₦)",
@@ -142,6 +115,7 @@ function AdmissionComponent() {
       amount: "2,000",
     },
   ]);
+
   return (
     <div className="flex flex-col gap-4  overflow-y-scroll overflow-x-hidden custom-scrollbar ">
       <SubTitleComponent
@@ -220,8 +194,8 @@ export function OnSelectSectionComponent({
         <SelectGroup>
           {options.map((data, index) => {
             return (
-              <SelectItem key={index} value={data.content}>
-                {data.content}
+              <SelectItem key={index} value={data}>
+                {data}
               </SelectItem>
             );
           })}

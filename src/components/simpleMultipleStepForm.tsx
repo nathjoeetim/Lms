@@ -20,50 +20,29 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
-import { Button } from "@/components/ui/button";
-import { HashSpinner, ScaleSpinner } from "@/components/loader";
-
-import {
-  InnerOptions,
-  OnSelectSectionComponent,
-} from "@/app/admission/page";
+import { HashSpinner } from "@/components/loader";
 import { useRouter } from "next/navigation";
+import { OnSelectSectionComponent } from "@/app/dashboard/admission/page";
+import useAxios from "@/hooks/useAxios";
+import { SignupStudemtUrl } from "@/utils/network";
+import { sign } from "crypto";
 
 function SimpleMultipleStepForm() {
   const router = useRouter();
-  const [department, _setDepartment] = useState<InnerOptions[]>([
-    {
-      content: "Business Management ",
-    },
-    {
-      content: "Law",
-    },
-    {
-      content: "Political Sci",
-    },
-    {
-      content: "Music",
-    },
-    {
-      content: "Clinical Sci",
-    },
-    {
-      content: "Computer Engr.",
-    },
+  const { axiosHandler } = useAxios();
+  const [department, _setDepartment] = useState<string[]>([
+    "Business Management ",
+    "Law",
+    "Political Sci",
+    "Music",
+    "Clinical Sci",
+    "Computer Engr.",
   ]);
-  const [courseDuration, _setCourseDuration] = useState<InnerOptions[]>([
-    {
-      content: "4 Year",
-    },
-    {
-      content: "5 years",
-    },
+  const [courseDuration, _setCourseDuration] = useState<string[]>([
+    "4 Year",
+    "5 years",
   ]);
-  const [gender, _setGender] = useState<InnerOptions[]>([
-    { content: "Male" },
-    { content: "Female" },
-  ]);
+  const [gender, _setGender] = useState<string[]>(["Male", "Female"]);
   const [imageIsSet, setImage] = useState<boolean>(false);
   const [imagePath, setImagePath] = useState<string | ArrayBuffer>("");
 
@@ -104,6 +83,16 @@ function SimpleMultipleStepForm() {
     inputIsValid: otherNameInputIsValid,
     clearInputValue: onClearotherNameFieldHandeler,
     onChangeHandlerFn: onChangeotherNameHandelerFn,
+  } = useInputValidator(isNotEmpty);
+
+  const {
+    inputState: admissionDateInputValue,
+    inputIsBlur: admissionDateInputIsBlur,
+    inputIsBlurFn: admissionDateBlurInputHandelerFn,
+    hasNoError: admissionDateHasNoError,
+    inputIsValid: admissionDateInputIsValid,
+    clearInputValue: onClearadmissionDateFieldHandeler,
+    onChangeHandlerFn: admissionDateInputHandelerFn,
   } = useInputValidator(isNotEmpty);
 
   const {
@@ -154,33 +143,72 @@ function SimpleMultipleStepForm() {
     }
   }
 
-  function onSubmitFormHandeler() {
+  type signUpSheme = {
+    passport_path: string | ArrayBuffer;
+    first_name: string;
+    email: string;
+    other_name: string;
+    password: string;
+    gender: string;
+    course: string;
+    duration: string;
+    admissionDate: string;
+  };
+  const userInput: signUpSheme = {
+    passport_path: imagePath,
+    admissionDate: admissionDateInputValue,
+    course: selectedDepartmemnt,
+    duration: selectedCourseDuration,
+    email: emailInputValue,
+    password: passwordInputValue,
+    first_name: firstNameInputValue,
+    other_name: otherNameInputValue,
+    gender: selectedGender,
+  };
+  async function onSubmitFormHandeler(data: signUpSheme) {
     setIsLoading(true);
     const isValid =
       emailInputIsValid &&
       passwordInputIsValid &&
       firstNameInputIsValid &&
+      admissionDateInputIsValid &&
       otherNameInputIsValid;
 
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-      router.push("/login");
-    }, 3000);
+    const signupData = {
+      name: data.first_name + data.other_name,
+      email: data.email,
+      password: data.password,
+      gender: data.gender,
+      course: data.course,
+      passportPath: data.passport_path,
+      course_duration: data.duration,
+      admissionDate: new Date(data.admissionDate).toISOString(),
+      program: "Under-graduate",
+      level: "100 level",
+    };
 
     if (isValid && confirmPasswordInputValue === passwordInputValue) {
       console.log("Deatailed is Valid");
-      return () => clearTimeout(timer);
+
+      const response = await axiosHandler<signUpSheme, typeof signupData>(
+        SignupStudemtUrl,
+        "post",
+        signupData
+      );
+      if (response) {
+        router.push("/login");
+      } else {
+        console.log("failed to push");
+      }
     }
+
     console.log("is Submitted");
-    //
   }
 
   function AlertDialogFunction() {
     return (
       <AlertDialog>
-        <AlertDialogTrigger>
-          {isLoading ? <HashSpinner /> : "Next"}
-        </AlertDialogTrigger>
+        <AlertDialogTrigger>Next</AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Terms & Conditions</AlertDialogTitle>
@@ -197,7 +225,7 @@ function SimpleMultipleStepForm() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={onSubmitFormHandeler}>
+            <AlertDialogAction onClick={() => onSubmitFormHandeler(userInput)}>
               Proceed
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -347,14 +375,13 @@ function SimpleMultipleStepForm() {
             <input
               type="date"
               className="border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500"
+              value={admissionDateInputValue}
+              onChange={admissionDateInputHandelerFn}
+              onBlur={admissionDateBlurInputHandelerFn}
             />
           </div>
-
-          {/* <CalendarForm /> */}
           <div className="flex flex-row items-center justify-end w-full">
-            <div>
-              <AlertDialogFunction />
-            </div>
+            <div>{isLoading ? <HashSpinner /> : <AlertDialogFunction />}</div>
           </div>
         </div>
       </div>

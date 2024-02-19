@@ -13,36 +13,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  DataTableDemo,
-  TableContentAliese,
-} from "@/components/selectableTable";
+import { DataTableDemo } from "@/components/selectableTable";
+import { DepartmentType } from "@/utils/types";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
-const data: TableContentAliese[] = [
-  {
-    id: "29372863",
-    name: "Introduction To Clinical Sci (CS102)",
-    status: 70,
-    number: 2,
-    leader_name: "Sam David",
-  },
-  {
-    id: "29363",
-    name: "Clinical Sci (FCS111)",
-    status: 70,
-    number: 100,
-    leader_name: "Musa Stally",
-  },
-  {
-    id: "29369343",
-    name: "Clinical Statistics (FCS203)",
-    status: 100,
-    number: 4,
-    leader_name: "Stanly David",
-  },
-];
-
-const columns: ColumnDef<TableContentAliese>[] = [
+const columns: ColumnDef<DepartmentType>[] = [
   {
     id: "select",
     // useServer
@@ -104,13 +80,6 @@ const columns: ColumnDef<TableContentAliese>[] = [
     header: () => <div className="text-right">Credit Unit</div>,
     cell: ({ row }) => {
       const amount = row.getValue("number");
-
-      // // Format the amount as a dollar amount
-      // const formatted = new Intl.NumberFormat("en-US", {
-      //   style: "currency",
-      //   currency: "USD",
-      // }).format(amount);
-
       return (
         <div className="text-right font-medium">{row.getValue("number")}</div>
       );
@@ -131,12 +100,6 @@ const columns: ColumnDef<TableContentAliese>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
-            {/* <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy Acridation Number
-            </DropdownMenuItem> */}
             <DropdownMenuSeparator />
             <DropdownMenuItem>View Students</DropdownMenuItem>
             <DropdownMenuItem>View Courses Outline</DropdownMenuItem>
@@ -147,7 +110,10 @@ const columns: ColumnDef<TableContentAliese>[] = [
   },
 ];
 
-function SelectedDepartmentCourse() {
+function SelectedDepartmentCourse(props: { deptCourse: DepartmentType }) {
+  const { deptCourse } = props;
+  const selectedCourseName = deptCourse?.courses;
+
   return (
     <Card className="flex flex-col justify-start items-start  w-[97%] mx-auto p-3">
       <div className="flex flex-rol items-center gap-3 w-full p-2 box-border">
@@ -166,9 +132,9 @@ function SelectedDepartmentCourse() {
       </div>
       <div className="flex flex-col items-center justify-start w-full my-2 gap-4">
         <h4 className="flex flex-row w-full items-center justify-start text-xl font-semibold">
-          Clinical Science
+          {deptCourse?.name}
         </h4>
-        <DataTableDemo columns={columns} data={data} />
+        <DataTableDemo columns={columns} data={selectedCourseName} />
       </div>
     </Card>
   );

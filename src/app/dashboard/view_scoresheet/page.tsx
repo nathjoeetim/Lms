@@ -1,61 +1,43 @@
 "use client";
 import { Card } from "@/components/ui/card";
 import { IoFilterOutline } from "react-icons/io5";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { InnerOptions, OnSelectSectionComponent } from "../admission/page";
+import { OnSelectSectionComponent } from "../admission/page";
 import { SubTitleComponent } from "../page";
+import { useSelector } from "react-redux";
+import { FetchData } from "@/redux/fetchCurrentUserData";
+import { useDispatch } from "react-redux";
+import { DepartmentType } from "@/utils/types";
 
 function ExamsResultComponent() {
+  const getDepartmentHandeler: DepartmentType[] = useSelector(
+    (store: any) => store.currentUserGetter.allDepartment
+  );
+  const dispatch = useDispatch();
   const [selectedSectionValue, setSelectedSectionValue] = useState<string>();
   const [selectedDepartmentValue, setselectedDepartmentValue] =
     useState<string>();
   const [selectedBatchValue, setselectedBatchValue] = useState<string>();
-  const [options, _setOptions] = useState<InnerOptions[]>([
-    {
-      content: "2019-2020",
-    },
-    {
-      content: "2020-2021",
-    },
-    {
-      content: "2021-2022",
-    },
-    {
-      content: "2022-2023",
-    },
-    {
-      content: "2023-2024",
-    },
+  const [options, _setOptions] = useState<string[]>([
+    "2019-2020",
+    "2020-2021",
+    "2021-2022",
+    "2022-2023",
+    "2023-2024",
   ]);
-  const [department, _setDepartment] = useState<InnerOptions[]>([
-    {
-      content: "Business Management ",
-    },
-    {
-      content: "Law",
-    },
-    {
-      content: "Political Sci",
-    },
-    {
-      content: "Music",
-    },
-    {
-      content: "Clinical Sci",
-    },
-    {
-      content: "Computer Engr.",
-    },
-  ]);
-  const [batch, _setBatch] = useState<InnerOptions[]>([
-    {
-      content: "Batch A",
-    },
-    {
-      content: "Batch B",
-    },
-  ]);
+  const [department, setDepartment] = useState<string[]>([]);
+  const [batch, _setBatch] = useState<string[]>(["Batch A", "Batch B"]);
+
+  useEffect(() => {
+    FetchData(dispatch);
+
+    const allDepartment = getDepartmentHandeler.map(
+      (data: DepartmentType) => data.name
+    );
+    setDepartment(allDepartment);
+  }, [dispatch, getDepartmentHandeler]);
+
   return (
     <div className="flex flex-col gap-4">
       <SubTitleComponent

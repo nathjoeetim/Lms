@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { DataTableDemo, TableContentAliese } from "@/components/selectableTable";
+import { DataTableDemo } from "@/components/selectableTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -33,62 +33,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { InnerOptions, OnSelectSectionComponent } from "@/app/dashboard/admission/page";
+import { OnSelectSectionComponent } from "@/app/dashboard/admission/page";
 import useAxios from "@/hooks/useAxios";
-import { FacultyType, PaginatedType } from "@/utils/types";
-import { FacultiesUrl } from "@/utils/network";
-import { auth_token } from "@/utils/constant";
+import { FacultyType } from "@/utils/types";
+import { useDispatch, useSelector } from "react-redux";
+import useInputValidator, { isNotEmpty } from "@/screens/inputAuth";
 
-
-const data: TableContentAliese[] = [
-  {
-    id: "m5gr84i9",
-    number: 316,
-    name: "Science",
-    status: "Bsc",
-    leader_name: "Jonas samuel",
-  },
-  {
-    id: "3u1reuv4",
-    number: 242,
-    name: "Law",
-    status: "Bsc",
-    leader_name: "Dewen samuel",
-  },
-  {
-    id: "derv1ws0",
-    name: "Management Science",
-    number: 837,
-    status: "Bsc",
-
-    leader_name: "Manny law",
-  },
-  {
-    id: "5kma53ae",
-    name: "Art",
-    number: 874,
-    status: "Bsc",
-
-    leader_name: "Friday Sunday",
-  },
-  {
-    id: "bhqecj4p",
-    number: 721,
-    name: "Social Science",
-    status: "Bsc",
-
-    leader_name: "David Rid",
-  },
-  {
-    id: "jandajbjh",
-    number: 4321,
-    name: "Education",
-    status: "Bsc",
-    leader_name: "Etoro John",
-  },
-];
-
-const columns: ColumnDef<TableContentAliese>[] = [
+const columns: ColumnDef<FacultyType>[] = [
   {
     id: "select",
     // useServer
@@ -115,10 +66,10 @@ const columns: ColumnDef<TableContentAliese>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Qualification",
+    accessorKey: "departments",
+    header: "No. of Department",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("departments").length}</div>
     ),
   },
   {
@@ -134,12 +85,10 @@ const columns: ColumnDef<TableContentAliese>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("name")}</div>
-    ),
+    cell: ({ row }) => <div className="lowercase">{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "leader_name",
+    accessorKey: "dean",
     header: ({ column }) => {
       return (
         <Button
@@ -151,16 +100,12 @@ const columns: ColumnDef<TableContentAliese>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("leader_name")}</div>
-    ),
+    cell: ({ row }) => <div className="lowercase">{row.getValue("dean")}</div>,
   },
   {
-    accessorKey: "number",
-    header: () => <div className="text-left">No. of Lectures</div>,
+    accessorKey: "short_name",
+    header: () => <div className="text-left">Short Name</div>,
     cell: ({ row }) => {
-      const amount = row.getValue("number");
-
       // // Format the amount as a dollar amount
       // const formatted = new Intl.NumberFormat("en-US", {
       //   style: "currency",
@@ -169,7 +114,7 @@ const columns: ColumnDef<TableContentAliese>[] = [
 
       return (
         <div className="text-left font-medium">
-          {row.getValue("number")}
+          {row.getValue("short_name")}
         </div>
       );
     },
@@ -178,8 +123,6 @@ const columns: ColumnDef<TableContentAliese>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const TableContentAliese = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -191,9 +134,7 @@ const columns: ColumnDef<TableContentAliese>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() =>
-                navigator.clipboard.writeText(TableContentAliese.leader_name)
-              }
+              onClick={() => navigator.clipboard.writeText(row.original.name)}
             >
               Copy Lectures Name
             </DropdownMenuItem>
@@ -208,23 +149,15 @@ const columns: ColumnDef<TableContentAliese>[] = [
 ];
 
 function FacultyComponent() {
-  // const token = localStorage.getItem(auth_token)
-  
-  const { axiosHandler } = useAxios()
-
-  const getFaculties = async () => {
-  
-    const response = await axiosHandler<PaginatedType<FacultyType>>(FacultiesUrl, "get", null, true)
-    if (response) {
-      console.log(response.results)
-    }
-  }
+  const onGetAllFaculties = useSelector(
+    (store: any) => store.currentUserGetter.allFaculties
+  );
+  const dispatch = useDispatch();
+  const [faculties, setFaculty] = useState<FacultyType[]>([]);
 
   useEffect(() => {
-    getFaculties()
-  
-  }, [])
-  
+    setFaculty(onGetAllFaculties);
+  }, [onGetAllFaculties]);
 
   return (
     <Card
@@ -245,7 +178,7 @@ function FacultyComponent() {
               </h5>
             </div>
             <div className="p-3 w-full">
-              <DataTableDemo data={data} columns={columns} />
+              <DataTableDemo data={faculties} columns={columns} />
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -257,27 +190,26 @@ function FacultyComponent() {
 export default FacultyComponent;
 
 export function AddFacultyAlertDialog() {
-  const [onSelectedHOD, setSelectedDean] = useState<string>("");
-  const facultyOption: InnerOptions[] = [
-    {
-      content: "Management Science",
-    },
-    {
-      content: "Law",
-    },
-    {
-      content: "Clinical Science",
-    },
-  ];
-  const Staff: InnerOptions[] = [
-    {
-      content: "SAMUEL",
-    },
-    {
-      content: "Ubong",
-    },
+  const {
+    inputState: facultyInputValue,
+    inputIsBlur: facultyInputIsBlur,
+    inputIsValid: facultyInputIsVaid,
+    inputIsBlurFn: OnFacultyInoutIsBlurFn,
+    onChangeHandlerFn: onFacultyNameInputHandelerFn,
+    hasNoError: facultyNameHasNoError,
+    clearInputValue: onClearFacultyInput,
+  } = useInputValidator(isNotEmpty);
 
-  ];
+  const {
+    inputState: shortNameInputValue,
+    inputIsBlur: shortNameIsBlur,
+    inputIsBlurFn: shortNameIsBluredFn,
+    hasNoError: shortNameHasNoError,
+    inputIsValid: shortNameIsValid,
+    onChangeHandlerFn: onShortNameChangrHandelerFn,
+    clearInputValue: onClearShoerNameFunction,
+  } = useInputValidator(isNotEmpty);
+
   return (
     <AlertDialog>
       <AlertDialogTrigger>Add Faculty</AlertDialogTrigger>
@@ -295,16 +227,22 @@ export function AddFacultyAlertDialog() {
                 <h4 className="text-base font-semibold text-gray-800">
                   Faculty Name
                 </h4>
-                <Input placeholder="Faculty Name" />
+                <Input
+                  placeholder="Faculty Name"
+                  value={facultyInputValue}
+                  onChange={onFacultyNameInputHandelerFn}
+                  onBlur={OnFacultyInoutIsBlurFn}
+                />
               </div>
               <div className="flex flex-col items-start justify-start w-[90%] gap-0">
                 <h4 className="text-base font-semibold text-gray-800">
-                  Dean
+                  Short Name
                 </h4>
-                <OnSelectSectionComponent
-                  placeHolder="Select"
-                  options={Staff}
-                  onGetSelectedValueHandeler={setSelectedDean}
+                <Input
+                  placeholder="Faculty Name"
+                  value={shortNameInputValue}
+                  onChange={onShortNameChangrHandelerFn}
+                  onBlur={shortNameIsBluredFn}
                 />
               </div>
             </div>

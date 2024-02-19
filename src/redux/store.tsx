@@ -2,11 +2,11 @@
 
 import { configureStore } from "@reduxjs/toolkit";
 import UserUiSlice from "./ui";
-import CountryFetcherApi from "./fetchCountry";
+import CurrentUserData from "./fetchCurrentUserData";
 
 export const store = configureStore({
   reducer: {
     ui: UserUiSlice.reducer,
-    countryGetter: CountryFetcherApi.reducer,
+    currentUserGetter: CurrentUserData.reducer,
   },
 });
