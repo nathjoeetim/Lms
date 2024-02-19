@@ -1,4 +1,3 @@
-"use client";
 import * as React from "react";
 import {
   ColumnDef,
@@ -30,7 +29,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-function DataTableDemo({ data, columns }: any) {
+type DataTableProps = {
+  data: any[];
+  columns: any[];
+};
+
+function DataTableDemo({ data, columns }: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -119,7 +123,7 @@ function DataTableDemo({ data, columns }: any) {
               table.getRowModel().rows?.map(row => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() ? "selected" : undefined}
                 >
                   {row.getVisibleCells().map(cell => (
                     <TableCell key={cell.id}>
