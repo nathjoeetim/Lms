@@ -47,22 +47,6 @@ function CoursesComponent() {
     } else {
       router.push("/login");
     }
-    setSelectedStatusValue("All");
-    setSectionValue("All");
-    setDepartmentSelected(selectedDepartment.trim() !== "");
-
-    if (isDepartmentSelected) {
-      const getSelectedDepartmentDetails = allDepartment.find(
-        (data: DepartmentType) => data.name === selectedDepartment
-      );
-      if (getSelectedDepartmentDetails) {
-        setSelectedDetailValue(getSelectedDepartmentDetails!);
-      }
-    } else {
-      setSelectedDetailValue(null);
-    }
-
-    //
   }, [
     allDepartment,
     dispatch,
@@ -125,11 +109,11 @@ function CoursesComponent() {
           </AccordionItem>
         </Accordion>
       </Card>
-      <div className="w-full">
+      {/* <div className="w-full">
         {isDepartmentSelected && (
           <SelectedDepartmentCourse deptCourse={selectedDetailedValue!} />
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

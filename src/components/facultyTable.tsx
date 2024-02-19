@@ -68,7 +68,7 @@ const columns: ColumnDef<FacultyType>[] = [
     accessorKey: "departments",
     header: "No. of Department",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("departments").length}</div>
+      <div className="capitalize">{row.getValue("departments")}</div>
     ),
   },
   {
