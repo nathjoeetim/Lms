@@ -3,7 +3,7 @@ import React from "react"; // Added React import statement
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BiCloudDownload } from "react-icons/bi";
-import { SubTitleComponent } from "@/app/dashboard/page";
+import SubTitleComponent from "@/components/subTitle";
 import ImportContentField from "./import_bulkList";
 
 function BulkImportEnrolment() {

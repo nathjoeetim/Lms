@@ -4,13 +4,13 @@ import { Card } from "@/components/ui/card";
 import React, { useEffect, useState } from "react";
 import { IoFilterOutline } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
-import { SubTitleComponent } from "../page";
 import { useSelector } from "react-redux";
 import { FetchData } from "@/redux/fetchCurrentUserData";
 import { useDispatch } from "react-redux";
 import { DepartmentType } from "@/utils/types";
 import OnSelectSectionComponent from "@/components/selectedSection";
 import DataTable from "@/components/dataTake";
+import SubTitleComponent from "@/components/subTitle";
 
 type TableAlises = {
   regNumber: string | any;

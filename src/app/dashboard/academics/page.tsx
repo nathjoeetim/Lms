@@ -34,7 +34,7 @@ import {
 import OnSelectSectionComponent from "@/components/selectedSection";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { SubTitleComponent } from "../page";
+import SubTitleComponent from "@/components/subTitle";
 import FacultyComponent from "@/components/facultyTable";
 import { useDispatch } from "react-redux";
 import { FetchData } from "@/redux/fetchCurrentUserData";

@@ -4,7 +4,7 @@ import { IoFilterOutline } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import OnSelectSectionComponent from "@/components/selectedSection";
-import { SubTitleComponent } from "../page";
+import SubTitleComponent from "@/components/subTitle";
 import { useSelector } from "react-redux";
 import { FetchData } from "@/redux/fetchCurrentUserData";
 import { useDispatch } from "react-redux";

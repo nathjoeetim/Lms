@@ -1,7 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { FaBullhorn } from "react-icons/fa6";
-import { type CarouselApi } from "@/components/ui/carousel";
-// import Autoplay from "embla-carousel-autoplay"
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -100,11 +99,9 @@ export function Item() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          {element.header}
-                        </AlertDialogTitle>
+                        <AlertDialogTitle>{element.header}</AlertDialogTitle>
                         <AlertDialogDescription>
-                        {element.content}
+                          {element.content}
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>

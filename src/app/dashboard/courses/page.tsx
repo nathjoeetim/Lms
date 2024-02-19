@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { useEffect, useState } from "react";
 import OnSelectSectionComponent from "@/components/selectedSection";
-import { SubTitleComponent } from "../page";
+import SubTitleComponent from "@/components/subTitle";
 import SelectedDepartmentCourse from "@/components/selectedCourses";
 import { useSelector } from "react-redux";
 import { auth_token } from "@/utils/constant";

@@ -13,7 +13,7 @@ import { FetchData } from "@/redux/fetchCurrentUserData";
 import { useDispatch } from "react-redux";
 import { DepartmentType } from "@/utils/types";
 import useInputValidator, { isEmail, isNotEmpty } from "@/screens/inputAuth";
-import { SubTitleComponent } from "@/app/dashboard/page";
+import SubTitleComponent from "@/components/subTitle";
 import OnSelectSectionComponent from "@/components/selectedSection";
 
 function EnrollStudentComponent() {

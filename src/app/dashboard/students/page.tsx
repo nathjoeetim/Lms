@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import OnSelectSectionComponent from "@/components/selectedSection";
-import { SubTitleComponent } from "../page";
+import SubTitleComponent from "@/components/subTitle";
 import SearchedStudentComponent from "@/components/searchedStudent";
 import { useSelector } from "react-redux";
 import { FetchData } from "@/redux/fetchCurrentUserData";

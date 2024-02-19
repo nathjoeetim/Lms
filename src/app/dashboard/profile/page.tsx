@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { SubTitleComponent } from "../page";
+import SubTitleComponent from "@/components/subTitle";
 import passport from "@/assets/profileImg.jpeg";
 import { useSelector } from "react-redux";
 
