@@ -22,6 +22,7 @@ import { UserInterfaceActions } from "@/redux/ui";
 import SideBarItemsComponent from "@/components/SideBarItems";
 import { useRouter } from "next/navigation";
 import LogoutButton from "@/hooks/useLogout";
+import { HashSpinner } from "@/components/loader";
 
 export interface Metadata {
   title: string;
@@ -47,7 +48,6 @@ const DashBoardLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const [isMounted, setIsMounted] = useState(false);
   const dispatch = useDispatch();
 
-  // State to manage sidebar visibility
   // Effect to handle window resize and update sidebar visibility
   useEffect(() => {
     // this gets rid of hydration error waits for the component to mount
@@ -81,8 +81,8 @@ const DashBoardLayout: React.FC<RootLayoutProps> = ({ children }) => {
         <title>{metadata.title}</title>
       </head>
       <body>
-        <div className="flex flex-row  bg-[#F0F2F5] w-full  h-screen ">
-          {isMounted && (
+        {isMounted ? (
+          <div className="flex flex-row  bg-[#F0F2F5] w-full  h-screen ">
             <SideBarContainer
               $isVisible={sideBarState}
               className={` flex flex-col gap-2 border-r border-solid border-gray-500 box-border bg-white ${
@@ -119,16 +119,18 @@ const DashBoardLayout: React.FC<RootLayoutProps> = ({ children }) => {
               </div>
               <SideBarItemsComponent />
             </SideBarContainer>
-          )}
-          <div className="absolute flex flex-col p-3 bg-slate-600 bottom-2 items-center justify-center right-[-1rem] transform -translate-x-1/2 rounded-lg opacity-75 z-50 cursor-pointer hover:opacity-100">
-            <PiDesktopTowerDuotone size={23} color="white" />
-            <h4 className="text-slate-50">E-class</h4>
+            <div className="absolute flex flex-col p-3 bg-slate-600 bottom-2 items-center justify-center right-[-1rem] transform -translate-x-1/2 rounded-lg opacity-75 z-50 cursor-pointer hover:opacity-100">
+              <PiDesktopTowerDuotone size={23} color="white" />
+              <h4 className="text-slate-50">E-class</h4>
+            </div>
+            <div className="flex flex-col flex-1">
+              <HeaderDashboard />
+              {children}
+            </div>
           </div>
-          <div className="flex flex-col flex-1">
-            <HeaderDashboard />
-            {children}
-          </div>
-        </div>
+        ) : (
+          <HashSpinner />
+        )}
       </body>
     </html>
   );
