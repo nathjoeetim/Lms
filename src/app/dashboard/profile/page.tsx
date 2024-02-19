@@ -3,11 +3,21 @@ import Image from "next/image";
 import SubTitleComponent from "@/components/subTitle";
 import passport from "@/assets/profileImg.jpeg";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { FetchData } from "@/redux/fetchCurrentUserData";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
 
 function AdminProfileComponent() {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const userDetails = useSelector(
     (store: any) => store.currentUserGetter.currentUser
   );
+
+  useEffect(() => {
+    FetchData(dispatch, router);
+  });
 
   return (
     <div className="flex flex-col gap-4 overflow-y-scroll overflow-x-hidden custom-scrollbar">
