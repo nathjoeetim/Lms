@@ -4,8 +4,10 @@ import axios from "axios";
 import { toast } from "sonner";
 import { auth_token, session_active } from "@/utils/constant";
 import { HandleLogOut } from "./useLogout";
+import { useRouter } from "next/navigation";
 
 export default function useAxios() {
+  const router = useRouter();
   //   const { handleLogOut: logout } = useLogout();
   async function axiosHandler<T, D = unknown>(
     url: string,
@@ -36,7 +38,7 @@ export default function useAxios() {
             localStorage.setItem(session_active, "true");
             // Redirect to sign-in page
             toast.error("Session expired. Please sign in again.");
-            HandleLogOut();
+            HandleLogOut(router);
           }
         } else {
           const message =
