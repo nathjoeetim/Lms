@@ -32,11 +32,11 @@ function Student() {
   const [department, setDepartment] = useState<string[]>([]);
 
   const [status, _setBatch] = useState<string[]>(["All", "Active", "InActive"]);
-  const [program, _setProgram] = useState<string[]>([
-    "All",
-    "Under-Graduate",
-    "Post-Graduate",
-  ]);
+  // const [program, _setProgram] = useState<string[]>([
+  //   "All",
+  //   "Under-Graduate",
+  //   "Post-Graduate",
+  // ]);
 
   useEffect(() => {
     FetchData(dispatch, router);
@@ -47,19 +47,12 @@ function Student() {
     setDepartment(allDepartment);
   }, [dispatch, getDepartmentHandeler, router]);
 
+  // get selected department
   const [onselectedDepertmentValue, setSelectedDepartmentValue] = useState("");
+  // get selected level
   const [onselectedLevelValue, setSelectedLevelValue] = useState("All");
   const [onselectedStatusValue, setSelectedStatusValue] = useState("All");
   const [onselectedProgramValue, setSelectedProgramValue] = useState("All");
-
-  // const studentInSelectedDepartment = getAllStudentHandeler.map(element => {
-  //   const trimesStudentDepartment = element.student_department
-  //     .replace(/\((.*?)\)/g, "")
-  //     .trim();
-  //   return trimesStudentDepartment === onselectedDepertmentValue;
-  // });
-
-  // console.log(studentInSelectedDepartment);
 
   return (
     <div className="w-full flex flex-col items-start   gap-4  overflow-y-scroll overflow-x-hidden custom-scrollbar  box-border">
@@ -92,26 +85,32 @@ function Student() {
                 onGetSelectedValueHandeler={setSelectedLevelValue}
               />
             </div>
-            <div className="w-60">
+            <h4 className="text-sm font-semibold h-full flex flex-col items-center justify-center text-red-400">
+              or
+            </h4>
+
+            <div className="flex flex-col items-start justify-start w-48">
+              <h4 className="text-sm font-semibold">Input Matric Number</h4>
+              <Input placeholder="Registration number" />
+            </div>
+            {/* <div className="w-60">
               <h4 className="text-sm font-semibold">Account Status</h4>
               <OnSelectSectionComponent
                 placeHolder="Status"
                 options={status}
                 onGetSelectedValueHandeler={setSelectedStatusValue}
               />
-            </div>
-            <div className="w-60">
+            </div> */}
+            {/* <div className="w-60">
               <h4 className="text-sm font-semibold">Program</h4>
               <OnSelectSectionComponent
                 placeHolder="Select Program"
                 options={program}
                 onGetSelectedValueHandeler={setSelectedProgramValue}
               />
-            </div>
+            </div> */}
           </div>
-          <div className="flex flex-row items-start justify-start w-48">
-            <Input placeholder="Registration number" />
-          </div>
+
           <div className="flex items-center justify-center p-3 w-full">
             <Button>View Student</Button>
           </div>

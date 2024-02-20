@@ -63,6 +63,7 @@ export async function FetchData(dispatch: Dispatch, router: any) {
   const { axiosHandler } = useAxios(router);
 
   const response = await axiosHandler<UserType>(CurrentUser, "GET", null, true);
+
   const deptRequest = await axiosHandler<Department>(
     DepartmentUrl,
     "GET",

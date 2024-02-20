@@ -39,12 +39,19 @@ import FacultyComponent from "@/components/facultyTable";
 import { useDispatch } from "react-redux";
 import { FetchData } from "@/redux/fetchCurrentUserData";
 import { useSelector } from "react-redux";
-import { DepartmentType, FacultyType, LecturerType } from "@/utils/types";
+import {
+  CreateDepartmentType,
+  DepartmentType,
+  FacultyType,
+  LecturerType,
+} from "@/utils/types";
 import useInputValidator, { isNotEmpty } from "@/screens/inputAuth";
 import { auth_token } from "@/utils/constant";
 import { useRouter } from "next/navigation";
 import useAxios from "@/hooks/useAxios";
-import { AddDepartmentURL } from "@/utils/network";
+import { AddDepartmentURL, DepartmentUrl } from "@/utils/network";
+import { ScaleSpinner } from "@/components/loader";
+import { toast, useToast } from "@/components/ui/use-toast";
 
 const columns: ColumnDef<DepartmentType>[] = [
   {
@@ -211,6 +218,8 @@ export default DepartmentComponent;
 function AddDepartmentAlertDialog() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { axiosHandler } = useAxios(router);
+
   const allFaculties: FacultyType[] = useSelector(
     (store: any) => store.currentUserGetter.allFaculties
   );
@@ -252,6 +261,15 @@ function AddDepartmentAlertDialog() {
     hasNoError: durationHasNoError,
     clearInputValue: onCleardurationInputFn,
   } = useInputValidator(isNotEmpty);
+  const {
+    inputState: shortNameInputValue,
+    onChangeHandlerFn: shortNameHandelerFn,
+    inputIsBlur: shortNameIsTouched,
+    inputIsBlurFn: shortNameIsBluredHanderFn,
+    inputIsValid: shortNameIsValid,
+    hasNoError: shortNameHasNoError,
+    clearInputValue: onClearshortNameInputFn,
+  } = useInputValidator(isNotEmpty);
 
   const {
     inputState: qualificationInputValue,
@@ -264,21 +282,21 @@ function AddDepartmentAlertDialog() {
   } = useInputValidator(isNotEmpty);
 
   type addDepartmentSheme = {
-    faculty_name: string;
-    duration: string;
     deparment: string;
-    department_head: string;
+    short_name: string;
+    duration: string;
     qualification: string;
+    faculty_name: string;
     level: string;
   };
 
   const CreateDepartmentData: addDepartmentSheme = {
     deparment: deparetmentInputValue,
-    department_head: onSelectedHOD,
     duration: durationInputValue,
+    short_name: shortNameInputValue,
     faculty_name: inSelectedFaculty,
     qualification: qualificationInputValue,
-    level: "400 Level",
+    level: "400",
   };
 
   async function onSubmit(data: addDepartmentSheme) {
@@ -286,12 +304,43 @@ function AddDepartmentAlertDialog() {
       departmentIsValid &&
       durationIsValid &&
       qualificationIsValid &&
+      shortNameIsValid &&
       inSelectedFaculty.trim() !== "" &&
       onSelectedHOD.trim() !== "";
 
+    const selectedFaculty = allFaculties.find(
+      element => element.name === data.faculty_name
+    );
+
+    const formData = {
+      name: data.deparment,
+      short_name: data.short_name,
+      program_duration: data.duration,
+      qualification: data.qualification,
+      faculty: selectedFaculty?.id ?? null, // Using optional chaining and nullish coalescing operator
+      level: data.level,
+    };
+
     if (isValid) {
-      console.log("form is valid");
+      const response = await axiosHandler<CreateDepartmentType>(
+        DepartmentUrl,
+        "POST",
+        formData,
+        true
+      );
+      if (response) {
+        FetchData(dispatch, router);
+        return;
+      } else {
+        toast({
+          title: "Error Try Again",
+          description: "Unable To Create Department",
+        });
+
+        return;
+      }
     }
+    return;
   }
 
   return (
@@ -329,18 +378,16 @@ function AddDepartmentAlertDialog() {
                 />
               </div>
               <div className="flex flex-row items-center justify-start gap-4">
-                <div className="flex flex-col items-start justify-start w-[30%] gap-0">
-                  <h4 className="text-base font-semibold text-gray-800">
-                    Level
-                  </h4>
+                <div className="flex flex-col items-start justify-start w-[20%] gap-0">
+                  <h4 className="text-sm font-semibold text-gray-800">Level</h4>
                   <Input
                     placeholder="100 Level"
                     className="bg-transparent text-slate-700 cursor-not-allowed outline-none focus:outline-none"
                     readOnly
                   />
                 </div>
-                <div className="flex flex-col items-start justify-start w-[50%] gap-0">
-                  <h4 className="text-base font-semibold text-gray-800">
+                <div className="flex flex-col items-start justify-start w-[30%] gap-0">
+                  <h4 className="text-sm font-semibold text-gray-800">
                     Program Duration
                   </h4>
                   <Input
@@ -349,6 +396,18 @@ function AddDepartmentAlertDialog() {
                     value={durationInputValue}
                     onChange={durationHandelerFn}
                     onBlur={durationIsBluredHanderFn}
+                  />
+                </div>
+                <div className="flex flex-col items-start justify-start w-[30%] gap-0">
+                  <h4 className="text-sm font-semibold text-gray-800">
+                    Short Name
+                  </h4>
+                  <Input
+                    placeholder="E.g. SMG"
+                    className="bg-transparent text-slate-700 outline-none focus:outline-none"
+                    value={shortNameInputValue}
+                    onChange={shortNameHandelerFn}
+                    onBlur={shortNameIsBluredHanderFn}
                   />
                 </div>
               </div>

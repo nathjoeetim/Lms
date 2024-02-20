@@ -4,66 +4,59 @@ import { Card } from "@/components/ui/card";
 import { MdRadioButtonChecked } from "react-icons/md";
 import { MdOutlineRadioButtonUnchecked } from "react-icons/md";
 import Image from "next/image";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import { MdAddCircle } from "react-icons/md";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
 import { FetchData } from "@/redux/fetchCurrentUserData";
 import { useDispatch } from "react-redux";
-import { DepartmentType } from "@/utils/types";
+import { DepartmentType, EnrollStudentType } from "@/utils/types";
 import useInputValidator, { isEmail, isNotEmpty } from "@/screens/inputAuth";
 import SubTitleComponent from "@/components/subTitle";
 import OnSelectSectionComponent from "@/components/selectedSection";
 import { useRouter } from "next/navigation";
+import useAxios from "@/hooks/useAxios";
+import { SignupStudemtUrl } from "@/utils/network";
+import { ScaleSpinner } from "@/components/loader";
+import { useToast } from "@/components/ui/use-toast";
 
 function EnrollStudentComponent() {
-  const [selectedCountry, setSelectedCountry] = useState<string>("");
   const getDepartmentHandeler: DepartmentType[] = useSelector(
     (store: any) => store.currentUserGetter.allDepartment
   );
+  const { toast } = useToast();
+
   const dispatch = useDispatch();
   const router = useRouter();
-  const [countries, setCountries] = useState([]);
-
+  const { axiosHandler } = useAxios(router);
   useEffect(() => {
     FetchData(dispatch, router);
 
     const allDepartment = getDepartmentHandeler.map(
       (data: DepartmentType) => data.name
     );
+
+    const allDepartmentid = getDepartmentHandeler.map(
+      (data: DepartmentType) => data.id
+    );
+
+    setDepartmentIndex(allDepartmentid);
     setDepartment(allDepartment);
-    const fetchCountryData = async () => {
-      try {
-        const response = await fetch("https://restcountries.com/v3.1/all");
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const jsonData = await response.json();
-        const countriesData = jsonData.map((el: any) => el.name.common);
-
-        setCountries(countriesData);
-      } catch (error) {
-        console.error(error);
-        toast.error("Failed to fetch countries data");
-      }
-    };
-
-    fetchCountryData();
   }, [dispatch, getDepartmentHandeler, router]);
-
+  const [isloading, setIsLoading] = useState<boolean>(false);
   const [imageIsSet, setImage] = useState<boolean>(false);
   const [imagePath, setImagePath] = useState<string | ArrayBuffer>("");
-  const [gender, _setGender] = useState<string[]>(["Male", "Female"]);
+  const [gender, _setGender] = useState<string[]>(["male", "female"]);
   const [department, setDepartment] = useState<string[]>([]);
-  const [level, _setLevel] = useState<string[]>(["100", "200", "300", "400"]);
-  const [genotype, setGenotype] = useState<string[]>([
+  const [genotype, _setGenotype] = useState<string[]>([
     "AA",
     "AS",
     "SS",
     "AC",
     "SC",
   ]);
+  const [allDepartmentIndex, setDepartmentIndex] = useState<number[]>([]);
   const [selectedGenoType, setSelectedGenotype] = useState<string>("");
   const [departmentValue, setSelectedDepartment] = useState<string>("");
   const [levelValue, setSelectedLevel] = useState<string>("");
@@ -77,7 +70,6 @@ function EnrollStudentComponent() {
   function onChangeImageHandler() {
     setImagePath("");
     setImage(false);
-    // Pass a dummy event argument or null if you're not using it
   }
 
   function onUploadFileHandler(e?: React.ChangeEvent<HTMLInputElement>) {
@@ -96,7 +88,12 @@ function EnrollStudentComponent() {
           <code className="text-white">No File Selected</code>
         </div>
       );
-      toast.error(message);
+      toast({
+        title: "Message",
+        description: message,
+        color: "red",
+      });
+      // toast.error(message);
     }
   }
 
@@ -137,11 +134,26 @@ function EnrollStudentComponent() {
   const {
     inputState: othernameInputValueHolder,
     onChangeHandlerFn: othernameValurHandelerFn,
-    hasNoError: othernameHasNoError,
-    inputIsBlur: othernameIsBlur,
-    inputIsBlurFn: othernameIsBlurHandelerFn,
-    inputIsValid: othernameInputIsValid,
-    clearInputValue: clearothernameInputHandelerFn,
+  } = useInputValidator(isNotEmpty);
+
+  const {
+    inputState: matricNumberInputValue,
+    onChangeHandlerFn: matricNumberValurHandelerFn,
+    hasNoError: matricNumberHasNoError,
+    inputIsBlur: matricNumberIsBlur,
+    inputIsBlurFn: matricNumberIsBlurHandelerFn,
+    inputIsValid: matricNumberInputIsValid,
+    clearInputValue: clearmatricNumberInputHandelerFn,
+  } = useInputValidator(isNotEmpty);
+
+  const {
+    inputState: contactNumberInputValue,
+    onChangeHandlerFn: contactNumberValurHandelerFn,
+    hasNoError: contactNumberHasNoError,
+    inputIsBlur: contactNumberIsBlur,
+    inputIsBlurFn: contactNumberIsBlurHandelerFn,
+    inputIsValid: contactNumberInputIsValid,
+    clearInputValue: clearcontactNumberInputHandelerFn,
   } = useInputValidator(isNotEmpty);
 
   const {
@@ -160,15 +172,39 @@ function EnrollStudentComponent() {
     }
     return;
   }
+  const setDepartmentValue = getDepartmentHandeler.find(
+    element => element.name === departmentValue
+  );
+  const [level, setLevel] = useState<string[]>(["1", "2", "3", "4"]);
 
-  function onSubmitFormInputHandelerFn() {
+  const registrationScheme = {
+    email: emailInputValue,
+    first_name: firstNameInputValueHolder,
+    gender: selectedGender,
+    last_name: surnameInputValueHolder,
+    level: 1,
+    matric_no: matricNumberInputValue,
+    password: passwordInputValueHolder,
+    phone: +contactNumberInputValue,
+    role: "student",
+    student_department:
+      setDepartmentValue != undefined ? setDepartmentValue?.id : 0,
+  };
+
+  function onValidateStudentEnrollment() {
     const formOneIsValid =
       emailInputIsValid &&
       passwordInputIsValid &&
       firstnameInputIsValid &&
-      surnameInputIsValid;
+      surnameInputIsValid &&
+      imagePath.toString().trim().length >= 1;
 
-    if (formOneIsValid) {
+    const formTwoIsValid =
+      departmentValue.trim().length >= 1 &&
+      levelValue.trim().length >= 1 &&
+      matricNumberInputIsValid;
+
+    if (formOneIsValid || formTwoIsValid) {
       if (formIndex === 3) {
         return;
       } else {
@@ -176,8 +212,45 @@ function EnrollStudentComponent() {
         return;
       }
     }
-    console.log("error");
     return;
+  }
+
+  async function onSubmitFormFn(data: EnrollStudentType) {
+    setIsLoading(true);
+    const formData = {
+      email: data.email,
+      first_name: data.first_name,
+      gender: data.gender,
+      last_name: data.last_name,
+      level: data.level,
+      matric_no: data.matric_no,
+      password: data.password,
+      phone: data.phone,
+      role: data.role,
+      student_department: data.student_department,
+    };
+
+    const response = await axiosHandler<EnrollStudentType, typeof formData>(
+      SignupStudemtUrl,
+      "POST",
+      formData,
+      true
+    );
+    if (response) {
+      toast({
+        title: `Successfully Enrolled`,
+        description: ` ${data.first_name} with the matric number of ${data.matric_no} `,
+        duration: 4000,
+      });
+      setIsLoading(false);
+      router.push("/dashboard/students");
+    }
+    toast({
+      title: `Failed to Enroll Student`,
+      description: ` Enrollment User ${data.first_name} Failed `,
+      duration: 4000,
+    });
+    setIsLoading(false);
   }
 
   return (
@@ -391,30 +464,18 @@ function EnrollStudentComponent() {
                     onGetSelectedValueHandeler={setSelectedLevel}
                   />
                 </div>
-                <div className="flex flex-col items-start justify-start">
-                  <h6 className="text-slate-600 font-medium text-sm">
-                    Date of Birth (DOB)
-                  </h6>
-                  <input
-                    type="date"
-                    className="border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500 h-9"
-                  />
-                </div>
               </div>
               <div className="flex flex-row items-start gap-2 justify-start w-full">
-                <div className="flex flex-col gap-0 justify-start items-start w-[250px]">
-                  <label className="text-sm font-medium text-slate-700">
-                    Academic Session
-                  </label>
-                  <div className="bg-slate-400 w-[170px] h-9 flex flex-row item-center justify-start p-2 rounded-md cursor-not-allowed text-[14px]">
-                    2023/2324
-                  </div>
-                </div>
                 <div className="flex flex-col gap-0 justify-start items-start w-[220px]">
                   <label className="text-sm font-medium text-slate-700">
                     Matric Number
                   </label>
-                  <Input placeholder="Matric or Jamb number" />
+                  <Input
+                    placeholder="Matric or Jamb number"
+                    value={matricNumberInputValue}
+                    onChange={matricNumberValurHandelerFn}
+                    onBlur={matricNumberIsBlurHandelerFn}
+                  />
                 </div>
               </div>
             </div>
@@ -430,67 +491,37 @@ function EnrollStudentComponent() {
                   <label className="text-sm font-medium text-slate-700">
                     Contact Number
                   </label>
-                  <Input placeholder="+234" type="tel" />
-                </div>
-                <div className="flex flex-col gap-0 justify-start items-start w-[90px]">
-                  <label className="text-sm font-medium text-slate-700">
-                    Genotype
-                  </label>
-                  <OnSelectSectionComponent
-                    options={genotype}
-                    placeHolder="Select"
-                    onGetSelectedValueHandeler={setSelectedGenotype}
-                  />
-                </div>
-                <div className="flex flex-col items-start justify-start">
-                  <h6 className="text-slate-600 font-medium text-sm">
-                    Date of Birth (DOB)
-                  </h6>
-                  <input
-                    type="date"
-                    className="border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500 h-9"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-row items-start gap-2 justify-start w-full">
-                <div className="flex flex-col gap-0 justify-start items-start w-[250px]">
-                  <label className="text-sm font-medium text-slate-700">
-                    Religion
-                  </label>
-                  <Input type="text" />
-                </div>
-                <div className="flex flex-col gap-0 justify-start items-start w-[220px]">
-                  <label className="text-sm font-medium text-slate-700">
-                    Matric Number
-                  </label>
-                  <Input placeholder="Matric or Jamb number" />
-                </div>
-              </div>
-              <div className="flex flex-row items-start gap-2 justify-start w-full">
-                <div className="flex flex-col gap-0 justify-start items-start w-[220px]">
-                  <label className="text-sm font-medium text-slate-700">
-                    Select Country
-                  </label>
-                  <OnSelectSectionComponent
-                    options={countries}
-                    onGetSelectedValueHandeler={setSelectedCountry}
-                    placeHolder="Select Country"
+                  <Input
+                    placeholder="+234"
+                    type="tel"
+                    value={contactNumberInputValue}
+                    onChange={contactNumberValurHandelerFn}
+                    onBlur={contactNumberIsBlurHandelerFn}
                   />
                 </div>
               </div>
             </div>
           )}
         </div>
-        <div className="flex flex-row absolute right-[50%] left-[50%] bottom-[2px] gap-3">
+        <div className="flex flex-row items-center absolute right-[50%] left-[50%] bottom-[2px] gap-3">
           {formIndex > 1 && (
             <Button className="w-[120px]" onClick={onGoToPreviousPageHandeler}>
               previous
             </Button>
           )}
           {formIndex === 3 ? (
-            <Button className="w-[120px]">Submit</Button>
+            isloading ? (
+              <ScaleSpinner />
+            ) : (
+              <Button
+                className="w-[120px]"
+                onClick={() => onSubmitFormFn(registrationScheme)}
+              >
+                Submit
+              </Button>
+            )
           ) : (
-            <Button className="w-[120px]" onClick={onSubmitFormInputHandelerFn}>
+            <Button className="w-[120px]" onClick={onValidateStudentEnrollment}>
               Next
             </Button>
           )}

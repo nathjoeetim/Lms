@@ -90,3 +90,16 @@ export type CreateDepartmentType = {
   faculty: string;
   level: number;
 };
+
+export type EnrollStudentType = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: number;
+  password: string;
+  gender: string;
+  role: string;
+  matric_no: string;
+  student_department: number;
+  level: number;
+};
