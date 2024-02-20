@@ -17,6 +17,7 @@ import {
 } from "@/utils/network";
 import useAxios from "@/hooks/useAxios";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const CurrentUserData = createSlice({
   name: "CurrentUser",
@@ -61,47 +62,55 @@ export default CurrentUserData;
 
 export async function FetchData(dispatch: Dispatch, router: any) {
   const { axiosHandler } = useAxios(router);
+  try {
+    const response = await axiosHandler<UserType>(
+      CurrentUser,
+      "GET",
+      null,
+      true
+    );
 
-  const response = await axiosHandler<UserType>(CurrentUser, "GET", null, true);
+    const deptRequest = await axiosHandler<Department>(
+      DepartmentUrl,
+      "GET",
+      null,
+      true
+    );
+    const facultyRequest = await axiosHandler<Faculties>(
+      FacultiesUrl,
+      "GET",
+      null,
+      true
+    );
 
-  const deptRequest = await axiosHandler<Department>(
-    DepartmentUrl,
-    "GET",
-    null,
-    true
-  );
-  const facultyRequest = await axiosHandler<Faculties>(
-    FacultiesUrl,
-    "GET",
-    null,
-    true
-  );
+    const lecturerRequest = await axiosHandler<LecturerType>(
+      LecturersUrl,
+      "GET",
+      null,
+      true
+    );
 
-  const lecturerRequest = await axiosHandler<LecturerType>(
-    LecturersUrl,
-    "GET",
-    null,
-    true
-  );
+    const getAllStudentRequest = await axiosHandler<StudentType>(
+      StudentUrl,
+      "GET",
+      null,
+      true
+    );
 
-  const getAllStudentRequest = await axiosHandler<StudentType>(
-    StudentUrl,
-    "GET",
-    null,
-    true
-  );
-
-  if (
-    response &&
-    deptRequest &&
-    facultyRequest &&
-    lecturerRequest &&
-    getAllStudentRequest
-  ) {
-    dispatch(onGetCurrentUserDataMethod(response));
-    dispatch(onGetDepartmentalData(deptRequest.results));
-    dispatch(onGetFacultyData(facultyRequest.results));
-    dispatch(onGetAllLecturerData(lecturerRequest));
-    // dispatch(onGetAllStudentDataMethos(getAllStudentRequest));
+    if (
+      response &&
+      deptRequest &&
+      facultyRequest &&
+      lecturerRequest &&
+      getAllStudentRequest
+    ) {
+      dispatch(onGetCurrentUserDataMethod(response));
+      dispatch(onGetDepartmentalData(deptRequest.results));
+      dispatch(onGetFacultyData(facultyRequest.results));
+      dispatch(onGetAllLecturerData(lecturerRequest));
+      // dispatch(onGetAllStudentDataMethos(getAllStudentRequest));
+    }
+  } catch (err: any) {
+    toast.error(`error: ${err.message}`);
   }
 }

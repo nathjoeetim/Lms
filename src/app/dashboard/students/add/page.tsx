@@ -19,13 +19,14 @@ import { useRouter } from "next/navigation";
 import useAxios from "@/hooks/useAxios";
 import { SignupStudemtUrl } from "@/utils/network";
 import { ScaleSpinner } from "@/components/loader";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
+// import { useToast } from "@/components/ui/use-toast";
 
 function EnrollStudentComponent() {
   const getDepartmentHandeler: DepartmentType[] = useSelector(
     (store: any) => store.currentUserGetter.allDepartment
   );
-  const { toast } = useToast();
+  // const { toast } = useToast();
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -88,11 +89,11 @@ function EnrollStudentComponent() {
           <code className="text-white">No File Selected</code>
         </div>
       );
-      toast({
-        title: "Message",
-        description: message,
-        color: "red",
-      });
+      // toast({
+      //   title: "Message",
+      //   description: message,
+      //   color: "red",
+      // });
       // toast.error(message);
     }
   }
@@ -237,19 +238,12 @@ function EnrollStudentComponent() {
       true
     );
     if (response) {
-      toast({
-        title: `Successfully Enrolled`,
-        description: ` ${data.first_name} with the matric number of ${data.matric_no} `,
-        duration: 4000,
-      });
+      toast.message(
+        `${data.first_name} with the matric number of ${data.matric_no} enrollment was successful`
+      );
       setIsLoading(false);
-      router.push("/dashboard/students");
+      // router.push("/dashboard/students");
     }
-    toast({
-      title: `Failed to Enroll Student`,
-      description: ` Enrollment User ${data.first_name} Failed `,
-      duration: 4000,
-    });
     setIsLoading(false);
   }
 

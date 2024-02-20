@@ -50,8 +50,7 @@ import { auth_token } from "@/utils/constant";
 import { useRouter } from "next/navigation";
 import useAxios from "@/hooks/useAxios";
 import { AddDepartmentURL, DepartmentUrl } from "@/utils/network";
-import { ScaleSpinner } from "@/components/loader";
-import { toast, useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 const columns: ColumnDef<DepartmentType>[] = [
   {
@@ -170,11 +169,12 @@ function DepartmentComponent() {
 
   useEffect(() => {
     if (localStorage.getItem(auth_token)) {
-      FetchData(dispatch, router).then(() => setDepartment(allDepartmentData));
+      FetchData(dispatch, router);
+      setDepartment(allDepartmentData);
     } else {
       router.push("/login");
     }
-  });
+  }, [dispatch, router, allDepartmentData]);
 
   return (
     <div className="flex flex-col gap-4 overflow-y-scroll overflow-x-hidden custom-scrollbar">
@@ -234,10 +234,12 @@ function AddDepartmentAlertDialog() {
   const [hodOption, setHodOption] = useState<string[]>([]);
   useEffect(() => {
     FetchData(dispatch, router);
-    const allFacultiesName = allFaculties.map((data: FacultyType) => data.name);
     const allDepartmentLecturerName = allLecturers.map(
       (data: LecturerType) => data.user
     );
+
+    const allFacultiesName = allFaculties.map((data: FacultyType) => data.name);
+
     setHodOption(allDepartmentLecturerName);
     setFaulty(allFacultiesName);
   }, [allFaculties, allLecturers, dispatch, router]);
@@ -330,13 +332,12 @@ function AddDepartmentAlertDialog() {
       );
       if (response) {
         FetchData(dispatch, router);
+        router.refresh();
+        toast.message("Department Sucessfully Created");
+
         return;
       } else {
-        toast({
-          title: "Error Try Again",
-          description: "Unable To Create Department",
-        });
-
+        toast.error("Unable To Create Department");
         return;
       }
     }
