@@ -134,7 +134,7 @@ function PeopleSubComponent() {
       </Accordion>
 
       {/* parenet holder */}
-      <Accordion type="single" collapsible>
+      {/* <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger
             onClick={handleClick2}
@@ -164,10 +164,10 @@ function PeopleSubComponent() {
             );
           })}
         </AccordionItem>
-      </Accordion>
+      </Accordion> */}
 
       {/* Staff / employees section  */}
-      <Accordion type="single" collapsible>
+      {/* <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger
             onClick={handleClick3}
@@ -197,7 +197,7 @@ function PeopleSubComponent() {
             );
           })}
         </AccordionItem>
-      </Accordion>
+      </Accordion> */}
     </div>
   );
 }

@@ -16,7 +16,6 @@ import {
   StudentUrl,
 } from "@/utils/network";
 import useAxios from "@/hooks/useAxios";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 const CurrentUserData = createSlice({
@@ -108,7 +107,7 @@ export async function FetchData(dispatch: Dispatch, router: any) {
       dispatch(onGetDepartmentalData(deptRequest.results));
       dispatch(onGetFacultyData(facultyRequest.results));
       dispatch(onGetAllLecturerData(lecturerRequest));
-      // dispatch(onGetAllStudentDataMethos(getAllStudentRequest));
+      dispatch(onGetAllStudentDataMethos(getAllStudentRequest));
     }
   } catch (err: any) {
     toast.error(`error: ${err.message}`);

@@ -103,3 +103,8 @@ export type EnrollStudentType = {
   student_department: number;
   level: number;
 };
+
+export type CreateFacultyType = {
+  name: string;
+  short_name: string;
+};

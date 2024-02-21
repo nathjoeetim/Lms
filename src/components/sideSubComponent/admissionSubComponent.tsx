@@ -65,9 +65,9 @@ function AdmissionSubComponent() {
             </Link>
           );
         })}
-        <AccordionContent className="flex flex-row gap-2 items-center justify-start p-2 mb-2 h-12 border-t border-b  text-slate-400 hover:bg-[#F0F2F5] text-sm">
+        {/* <AccordionContent className="flex flex-row gap-2 items-center justify-start p-2 mb-2 h-12 border-t border-b  text-slate-400 hover:bg-[#F0F2F5] text-sm">
           Application Portal <FaExternalLinkAlt size={11} />
-        </AccordionContent>
+        </AccordionContent> */}
       </AccordionItem>
     </Accordion>
   );

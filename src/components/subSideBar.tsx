@@ -56,7 +56,7 @@ export default SubSideBarComponent;
 
 function DashBoardSubComponent() {
   const pathname = usePathname();
-  const isActive = pathname === "/najncankqiu0933u988687?9u8&";
+  const isActive = pathname === "/dashboard";
 
   return (
     <Link href="/dashboard">

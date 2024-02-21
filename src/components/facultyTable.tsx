@@ -34,9 +34,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import useAxios from "@/hooks/useAxios";
-import { FacultyType } from "@/utils/types";
+import { CreateFacultyType, FacultyType } from "@/utils/types";
 import { useDispatch, useSelector } from "react-redux";
 import useInputValidator, { isNotEmpty } from "@/screens/inputAuth";
+import { useRouter } from "next/navigation";
+import { CreateFaculties } from "@/utils/network";
+import { FetchData } from "@/redux/fetchCurrentUserData";
+import { toast } from "sonner";
 
 const columns: ColumnDef<FacultyType>[] = [
   {
@@ -189,6 +193,13 @@ function FacultyComponent() {
 export default FacultyComponent;
 
 export function AddFacultyAlertDialog() {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { axiosHandler } = useAxios(router);
+  const allFaculties: FacultyType[] = useSelector(
+    (store: any) => store.currentUserGetter.allFaculties
+  );
+
   const {
     inputState: facultyInputValue,
     inputIsBlur: facultyInputIsBlur,
@@ -208,6 +219,39 @@ export function AddFacultyAlertDialog() {
     onChangeHandlerFn: onShortNameChangrHandelerFn,
     clearInputValue: onClearShoerNameFunction,
   } = useInputValidator(isNotEmpty);
+
+  const facultySheme: CreateFacultyType = {
+    name: facultyInputValue,
+    short_name: shortNameInputValue,
+  };
+
+  async function onSubmit(data: CreateFacultyType) {
+    const isValid = facultyInputIsVaid && shortNameIsValid;
+
+    const formData = {
+      name: data.name,
+      short_name: data.short_name,
+    };
+
+    if (isValid) {
+      const response = await axiosHandler<CreateFacultyType>(
+        CreateFaculties,
+        "POST",
+        formData,
+        true
+      );
+
+      if (response) {
+        FetchData(dispatch, router);
+        router.refresh();
+        toast.message("Faculty Sucessfully Created");
+        return;
+      } else {
+        toast.error("Unable To Create Department");
+        return;
+      }
+    }
+  }
 
   return (
     <AlertDialog>
@@ -249,7 +293,9 @@ export function AddFacultyAlertDialog() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={() => onSubmit(facultySheme)}>
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

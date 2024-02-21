@@ -8,18 +8,24 @@ import OnSelectSectionComponent from "@/components/selectedSection";
 import SubTitleComponent from "@/components/subTitle";
 import SearchedStudentComponent from "@/components/searchedStudent";
 import { useSelector } from "react-redux";
-import { FetchData } from "@/redux/fetchCurrentUserData";
+import {
+  FetchData,
+  onGetAllStudentDataMethos,
+} from "@/redux/fetchCurrentUserData";
 import { useDispatch } from "react-redux";
 import { DepartmentType, StudentType } from "@/utils/types";
 import { useRouter } from "next/navigation";
+import useAxios from "@/hooks/useAxios";
+import { StudentUrl } from "@/utils/network";
 
 function Student() {
   const getDepartmentHandeler: DepartmentType[] = useSelector(
     (store: any) => store.currentUserGetter.allDepartment
   );
-  const getAllStudentHandeler: StudentType[] = useSelector(
+  const getStudent: StudentType[] = useSelector(
     (store: any) => store.currentUserGetter.allStudents
   );
+
   const router = useRouter();
   const dispatch = useDispatch();
   const [options, _setOptions] = useState<string[]>([
@@ -29,14 +35,10 @@ function Student() {
     "300",
     "400",
   ]);
+  const [getDepartmentDetails, setDepartmentDetails] =
+    useState<DepartmentType>();
   const [department, setDepartment] = useState<string[]>([]);
-
-  const [status, _setBatch] = useState<string[]>(["All", "Active", "InActive"]);
-  // const [program, _setProgram] = useState<string[]>([
-  //   "All",
-  //   "Under-Graduate",
-  //   "Post-Graduate",
-  // ]);
+  // const { axiosHandler } = useAxios(router);
 
   useEffect(() => {
     FetchData(dispatch, router);
@@ -44,6 +46,7 @@ function Student() {
     const allDepartment = getDepartmentHandeler.map(
       (data: DepartmentType) => data.name
     );
+
     setDepartment(allDepartment);
   }, [dispatch, getDepartmentHandeler, router]);
 
@@ -51,8 +54,15 @@ function Student() {
   const [onselectedDepertmentValue, setSelectedDepartmentValue] = useState("");
   // get selected level
   const [onselectedLevelValue, setSelectedLevelValue] = useState("All");
-  const [onselectedStatusValue, setSelectedStatusValue] = useState("All");
-  const [onselectedProgramValue, setSelectedProgramValue] = useState("All");
+
+  function onViewSelectedStudent() {
+    // const selectedDepartment = getDepartmentHandeler.find((element) => {
+    //   return element.name === onselectedDepertmentValue;
+    // });
+    // const selectedStudent = getStudent.filter((element) => {
+    //   return element.student_department === selectedDepartment?.id;
+    // });
+  }
 
   return (
     <div className="w-full flex flex-col items-start   gap-4  overflow-y-scroll overflow-x-hidden custom-scrollbar  box-border">
@@ -93,22 +103,6 @@ function Student() {
               <h4 className="text-sm font-semibold">Input Matric Number</h4>
               <Input placeholder="Registration number" />
             </div>
-            {/* <div className="w-60">
-              <h4 className="text-sm font-semibold">Account Status</h4>
-              <OnSelectSectionComponent
-                placeHolder="Status"
-                options={status}
-                onGetSelectedValueHandeler={setSelectedStatusValue}
-              />
-            </div> */}
-            {/* <div className="w-60">
-              <h4 className="text-sm font-semibold">Program</h4>
-              <OnSelectSectionComponent
-                placeHolder="Select Program"
-                options={program}
-                onGetSelectedValueHandeler={setSelectedProgramValue}
-              />
-            </div> */}
           </div>
 
           <div className="flex items-center justify-center p-3 w-full">

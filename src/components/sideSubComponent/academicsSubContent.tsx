@@ -30,18 +30,18 @@ function AcademicsSubContent() {
       tittle: "Course Registration",
       link: "#",
     },
-    {
-      tittle: "Virtual Classroom",
-      link: "#",
-    },
-    {
-      tittle: "TimeTable / Schedule",
-      link: "#",
-    },
-    {
-      tittle: "Contents / Resource Library",
-      link: "#",
-    },
+    // {
+    //   tittle: "Virtual Classroom",
+    //   link: "#",
+    // },
+    // {
+    //   tittle: "TimeTable / Schedule",
+    //   link: "#",
+    // },
+    // {
+    //   tittle: "Contents / Resource Library",
+    //   link: "#",
+    // },
   ]);
 
   function handleClick1() {

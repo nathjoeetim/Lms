@@ -6,4 +6,5 @@ export const DepartmentUrl = `${BASE_URL}/departments`;
 export const FacultiesUrl = `${BASE_URL}/faculties`;
 export const LecturersUrl = `${BASE_URL}/users/lecturer/`;
 export const AddDepartmentURL = `${BASE_URL}/departments`;
-export const StudentUrl = `${BASE_URL}/users/student`;
+export const StudentUrl = `${BASE_URL}/users/student/`;
+export const CreateFaculties = `${BASE_URL}/faculties`;
