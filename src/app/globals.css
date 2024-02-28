@@ -7,6 +7,7 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar {
+  display: none;
   width: 3px;
   background-color: blue;
 }
@@ -15,6 +16,30 @@
   background-color: hsla(212, 96%, 78%, 0.505);
   border-radius: 20px;
   cursor: pointer;
+}
+* {
+  transition: 0.3s ease-in-out;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  height: 100vh;
+  overflow-y: hidden;
+  transition: 0.3s ease-in-out;
+}
+
+.max-lines-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+}
+
+.active {
+  color: black;
+
+  background-color: #8492a6;
 }
 
 .card-container {
@@ -96,28 +121,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-* {
-  transition: 0.3s ease;
-  padding: 0;
-  margin: 0;
-}
-
-html {
-  height: 100vh;
-  overflow-y: hidden;
-}
-
-.max-lines-2 {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  -webkit-line-clamp: 2;
-}
-
-.active {
-  color: black;
-
-  background-color: #8492a6;
 }

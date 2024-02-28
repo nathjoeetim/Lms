@@ -76,7 +76,7 @@ export type UserType = {
 export type StudentType = {
   id: number;
   user: string;
-  student_department: string;
+  student_department: number;
   level: string;
   matric_no: string;
   courses: any[];
@@ -107,4 +107,45 @@ export type EnrollStudentType = {
 export type CreateFacultyType = {
   name: string;
   short_name: string;
+};
+
+export type FindStudentByDepartment = {
+  message: string;
+  data: FindStudentInDartment[];
+};
+
+export type FindStudentInDartment = {
+  student_department: string;
+  user: string;
+  level: number;
+  matric_no: string;
+  semester: null;
+  courses: any[];
+};
+
+export type FindCourseByDepartment = {
+  message: string;
+  data: CoursesInDepartment[];
+};
+
+export type FindCourseInDepartment = {
+  student_department: string;
+  user: string;
+  level: number;
+  matric_no: string;
+  semester: null;
+  courses: any[];
+};
+
+export type CoursesInDepartment = {
+  id: number;
+  course_code: string;
+  course_name: string;
+  course_description: string;
+  course_credit: number;
+  course_unit: number;
+  course_status: boolean;
+  mark: string;
+  created_at: string;
+  updated_at: string;
 };

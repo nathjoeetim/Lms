@@ -1,19 +1,24 @@
 "use client";
-
 import { AnimatePresence, motion } from "framer-motion";
-// import { easeOut } from 'framer-motion/dom'
-import React from "react";
+import { CgMenuLeftAlt } from "react-icons/cg";
+import React, { useState } from "react";
 import { FlyoutLink, PricingContent } from "../HoverComponents/FlyOutLink";
-
-type Props = {};
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
+import { MdClose } from "react-icons/md";
 
 const Header = () => {
+  const [isBottomItemVisible, setIsBottomItemVisible] = useState(false);
+  const router = useRouter();
+  const toggleBottomItem = () => {
+    setIsBottomItemVisible(!isBottomItemVisible);
+  };
   return (
-    <header className="flex h-20 items-center justify-stretch bg-neutral-900 px-3 py-12">
+    <header className="relative flex flex-rol h-20 items-center justify-between w-full bg-neutral-900 px-12 py-12 max-md:p-5 ">
       <div className="text-3xl font-bold uppercase text-slate-300 cursor-pointer hover:text-slate-500">
-        School Name Here
+        St. David University
       </div>
-      <div className="flex flex-1 justify-evenly">
+      <div className="flex flex-row justify-evenly gap-7 px-7 sm:hidden md:hidden max-sm:hidden xl:flex lg:flex z-[900]">
         <FlyoutLink href="#" FlyoutContent={HomeContent}>
           Home
         </FlyoutLink>
@@ -30,6 +35,53 @@ const Header = () => {
           Services
         </FlyoutLink>
       </div>
+      <CgMenuLeftAlt
+        size={30}
+        color="white"
+        className="cursor-pointer md:flex xl:hidden lg:hidden"
+        onClick={toggleBottomItem}
+      />
+      <AnimatePresence>
+        {isBottomItemVisible && (
+          <motion.div
+            initial={{ x: -300, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -300, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="absolute flex flex-col bottom-[-350%] right-0 left-0 bg-neutral-500  p-5 gap-3 items-center justify-center w-full z-[100%]"
+          >
+            <div className="w-full flex felx-row items-center justify-end ">
+              <MdClose
+                size={25}
+                color="white"
+                onClick={toggleBottomItem}
+                className="cursor-pointer"
+              />
+            </div>
+            <div className="flex flex-col justify-center items-center w-full gap-7 px-7">
+              <FlyoutLink href="#" FlyoutContent={HomeContent}>
+                Home
+              </FlyoutLink>
+              <FlyoutLink href="#" FlyoutContent={Administration}>
+                Administration
+              </FlyoutLink>
+              <FlyoutLink href="#" FlyoutContent={PricingContent}>
+                Schools
+              </FlyoutLink>
+              <FlyoutLink href="#" FlyoutContent={PricingContent}>
+                Gallery
+              </FlyoutLink>
+              <FlyoutLink href="#" FlyoutContent={PricingContent}>
+                Services
+              </FlyoutLink>
+            </div>
+            <div className="flex flex-row items-center w-full justify-center gap-5">
+              <Button>Student Login</Button>
+              <Button onClick={() => router.push("/login")}>Staff Login</Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

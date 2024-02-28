@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import "@/app/globals.css";
 import styled from "styled-components";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
@@ -78,7 +79,11 @@ const DashBoardLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <>
       {isMounted ? (
-        <div className="flex flex-row  bg-[#F0F2F5] w-full  h-screen ">
+        <div
+          className={`flex flex-row bg-[#F0F2F5] w-full h-screen ${
+            isMounted ? "loaded" : ""
+          }`}
+        >
           <SideBarContainer
             $isVisible={sideBarState}
             className={` flex flex-col gap-2 border-r border-solid border-gray-500 box-border bg-white ${

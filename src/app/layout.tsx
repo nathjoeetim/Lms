@@ -1,5 +1,7 @@
 "use client";
+import { useEffect, useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -18,9 +20,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} ${isLoaded ? "loaded" : ""}`}>
         <Provider store={store}>
           {children}
           <Toaster richColors />

@@ -13,10 +13,17 @@ import SubTitleComponent from "@/components/subTitle";
 import SelectedDepartmentCourse from "@/components/selectedCourses";
 import { useSelector } from "react-redux";
 import { auth_token } from "@/utils/constant";
-import { FetchData } from "@/redux/fetchCurrentUserData";
+import {
+  FetchData,
+  onGetSpecificDepartmentCourses,
+} from "@/redux/fetchCurrentUserData";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import { DepartmentType } from "@/utils/types";
+import { DepartmentType, FindCourseByDepartment } from "@/utils/types";
+import useAxios from "@/hooks/useAxios";
+import { BASE_URL, CoursesInDepartment, getCourses } from "@/utils/network";
+import CoursesByDepartment from "@/components/Courses";
+import { Button } from "@/components/ui/button";
 
 function CoursesComponent() {
   const allDepartment: DepartmentType[] = useSelector(
@@ -24,18 +31,23 @@ function CoursesComponent() {
   );
   const dispatch = useDispatch();
   const router = useRouter();
+  const { axiosHandler } = useAxios(router);
+
   const [level, _setLevels] = useState<string[]>(["All"]);
   const [department, setDepartment] = useState<string[]>([]);
   const [determineSemester, setDeterminedSemester] = useState<string[]>([
     "All",
   ]);
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [sessionValue, setSectionValue] = useState<string>("");
   const [selectedDepartment, setSelectedDepartment] = useState<string>("");
   const [selectedStatusValue, setSelectedStatusValue] = useState<string>("");
   const [isDepartmentSelected, setDepartmentSelected] =
     useState<Boolean>(false);
-  const [selectedDetailedValue, setSelectedDetailValue] =
-    useState<DepartmentType | null>(null);
+  const [SelectedCourse, setSelectedCourse] =
+    useState<FindCourseByDepartment>();
+
+  const [isSelected, setIsSelected] = useState<boolean>(false);
 
   useEffect(() => {
     if (localStorage.getItem(auth_token)) {
@@ -55,17 +67,51 @@ function CoursesComponent() {
     isDepartmentSelected,
   ]);
 
-  console.log(selectedDetailedValue);
+  type CoursesData = {
+    id: number | undefined;
+  };
+
+  function findCourseHandelerFn() {
+    setIsLoading(true);
+    if (selectedDepartment.trim() !== "") {
+      const departmentSelected = allDepartment.find(
+        (data: DepartmentType) => data.name === selectedDepartment
+      );
+      axiosHandler<FindCourseByDepartment>(
+        `${BASE_URL}/course/dept/${departmentSelected?.id}`,
+        "GET",
+        null,
+        true
+      )
+        .then(req => {
+          if (req) {
+            onGetSpecificDepartmentCourses(req);
+            setSelectedCourse(req);
+            setIsSelected(true);
+          }
+          setIsLoading(false);
+        })
+        .catch(error => {
+          console.error("Error fetching courses:", error);
+          setIsLoading(false);
+        });
+
+      setIsLoading(false);
+
+      return;
+    }
+  }
+
   return (
     <div className="flex flex-col gap-4 overflow-y-scroll overflow-x-hidden custom-scrollbar ">
       <SubTitleComponent
-        pageIdentifier="> Departmental Courses"
+        pageIdentifier=" > Departmental Courses"
         section="2023/2024"
         semester="First Semester "
         link="/dashboard"
       />
       <Card className="flex flex-col justify-start items-start  w-[97%] mx-auto">
-        <Accordion type="single" className="w-full" collapsible>
+        <Accordion type="single" className="w-full">
           <AccordionItem value="item-1">
             <AccordionTrigger className="p-2">
               {" "}
@@ -75,7 +121,7 @@ function CoursesComponent() {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <div className="flex flex-rol items-center justify-start gap-3  w-full p-4 box-border">
+              <div className="flex flex-col items-center justify-start gap-3  w-full p-4 box-border">
                 <div className="w-[100%] flex flex-row items-center gap-4 justify-between">
                   <div className="flex flex-col items-start text-slate-500 w-[200px]">
                     <h4 className="text-[.8rem] font-semibold ">
@@ -104,16 +150,18 @@ function CoursesComponent() {
                     />
                   </div>
                 </div>
+                <Button onClick={findCourseHandelerFn}>Search </Button>
               </div>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
       </Card>
-      {/* <div className="w-full">
-        {isDepartmentSelected && (
-          <SelectedDepartmentCourse deptCourse={selectedDetailedValue!} />
-        )}
-      </div> */}
+      {isSelected && (
+        <CoursesByDepartment
+          data={SelectedCourse?.data ?? []} // Ensure that it's of type CoursesInDepartment[]
+          message={SelectedCourse?.message ?? ""}
+        />
+      )}
     </div>
   );
 }

@@ -4,7 +4,6 @@ import axios from "axios";
 import { toast } from "sonner";
 import { auth_token, session_active } from "@/utils/constant";
 import { HandleLogOut } from "./useLogout";
-import { useRouter } from "next/navigation";
 
 export default function useAxios(router: any) {
   async function axiosHandler<T, D = unknown>(

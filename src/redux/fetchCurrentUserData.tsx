@@ -4,6 +4,7 @@ import {
   DepartmentType,
   Faculties,
   FacultyType,
+  FindCourseByDepartment,
   LecturerType,
   StudentType,
   UserType,
@@ -26,8 +27,12 @@ const CurrentUserData = createSlice({
     allFaculties: [] as FacultyType[],
     allLectures: [] as LecturerType[],
     allStudents: [] as StudentType[],
+    specificDepartmentCourses: {} as FindCourseByDepartment,
   },
   reducers: {
+    onGetSpecificDepartmentCourses(state, action) {
+      state.specificDepartmentCourses = action.payload;
+    },
     onGetCurrentUserDataMethod(state, action) {
       state.currentUser = action.payload;
     },
@@ -51,6 +56,7 @@ const CurrentUserData = createSlice({
 });
 
 export const {
+  onGetSpecificDepartmentCourses,
   onGetCurrentUserDataMethod,
   onGetDepartmentalData,
   onGetFacultyData,

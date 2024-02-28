@@ -13,10 +13,15 @@ import {
   onGetAllStudentDataMethos,
 } from "@/redux/fetchCurrentUserData";
 import { useDispatch } from "react-redux";
-import { DepartmentType, StudentType } from "@/utils/types";
+import {
+  DepartmentType,
+  FindStudentByDepartment,
+  StudentType,
+} from "@/utils/types";
 import { useRouter } from "next/navigation";
+import { BASE_URL, StudentUrl } from "@/utils/network";
+import { HashSpinner } from "@/components/loader";
 import useAxios from "@/hooks/useAxios";
-import { StudentUrl } from "@/utils/network";
 
 function Student() {
   const getDepartmentHandeler: DepartmentType[] = useSelector(
@@ -28,16 +33,21 @@ function Student() {
 
   const router = useRouter();
   const dispatch = useDispatch();
+  const { axiosHandler } = useAxios(router);
   const [options, _setOptions] = useState<string[]>([
-    "All",
     "100",
     "200",
     "300",
     "400",
+    "500",
   ]);
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [isSearched, setIsSearched] = useState<Boolean>(false);
   const [getDepartmentDetails, setDepartmentDetails] =
     useState<DepartmentType>();
   const [department, setDepartment] = useState<string[]>([]);
+  const [searchedStudent, setSearchedStudent] =
+    useState<FindStudentByDepartment>();
   // const { axiosHandler } = useAxios(router);
 
   useEffect(() => {
@@ -52,16 +62,50 @@ function Student() {
 
   // get selected department
   const [onselectedDepertmentValue, setSelectedDepartmentValue] = useState("");
+  const [CantSearch, setCantSearch] = useState(false);
   // get selected level
   const [onselectedLevelValue, setSelectedLevelValue] = useState("All");
 
-  function onViewSelectedStudent() {
-    // const selectedDepartment = getDepartmentHandeler.find((element) => {
-    //   return element.name === onselectedDepertmentValue;
-    // });
-    // const selectedStudent = getStudent.filter((element) => {
-    //   return element.student_department === selectedDepartment?.id;
-    // });
+  async function onViewSelectedStudent() {
+    setIsLoading(true);
+    const selectedDepartment = getDepartmentHandeler.find(
+      element => element.name === onselectedDepertmentValue
+    );
+
+    if (onselectedDepertmentValue == "" || onselectedDepertmentValue === "") {
+      setCantSearch(true);
+      setIsLoading(false);
+      setIsSearched(false);
+      return;
+    }
+
+    const response = await axiosHandler<FindStudentByDepartment>(
+      `${BASE_URL}/dept/students/${selectedDepartment?.id}`,
+      "GET",
+      null,
+      true
+    );
+
+    if (response && onselectedDepertmentValue !== "") {
+      setCantSearch(false);
+      const byLevel = response.data.filter(element => {
+        return element.level === +onselectedLevelValue;
+      });
+
+      setSearchedStudent({
+        data: byLevel,
+        message: response.message,
+      });
+      setTimeout(() => {
+        setIsLoading(false); // Setting isLoading to false after 3 seconds
+        setIsSearched(true);
+      }, 3000);
+      return;
+    }
+
+    setTimeout(() => {
+      setIsLoading(false); // Setting isLoading to false after 3 seconds
+    }, 3000);
   }
 
   return (
@@ -95,22 +139,35 @@ function Student() {
                 onGetSelectedValueHandeler={setSelectedLevelValue}
               />
             </div>
-            <h4 className="text-sm font-semibold h-full flex flex-col items-center justify-center text-red-400">
+            {/* <h4 className="text-sm font-semibold h-full flex flex-col items-center justify-center text-red-400">
               or
             </h4>
 
             <div className="flex flex-col items-start justify-start w-48">
               <h4 className="text-sm font-semibold">Input Matric Number</h4>
               <Input placeholder="Registration number" />
+            </div> */}
+
+            <div className="flex items-end justify-center p-3 h-full">
+              <Button onClick={() => onViewSelectedStudent()}>
+                View Student
+              </Button>
             </div>
           </div>
-
-          <div className="flex items-center justify-center p-3 w-full">
-            <Button>View Student</Button>
-          </div>
+          {CantSearch && (
+            <h4 className="flex flex-row w-full items-center justify-center text-red-400 font-semibold text-base">
+              ERROR: Ensure Department and Level Is Selected
+            </h4>
+          )}
         </div>
       </Card>
-      <SearchedStudentComponent />
+      {isLoading ? (
+        <HashSpinner />
+      ) : isSearched && !CantSearch ? (
+        <SearchedStudentComponent searchedStudent={searchedStudent} />
+      ) : (
+        ""
+      )}
     </div>
   );
 }
