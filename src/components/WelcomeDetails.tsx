@@ -22,7 +22,7 @@ const WelcomeDetails = (props: Props) => {
           height={300}
           classID="z-1"
         />
-        <div className="flex flex-col justify-end items-center bg-white w-[50%] p-4 rounded-lg">
+        <div className="flex flex-col justify-end items-center bg-white w-[50%] p-4 rounded-lg max-md:w-[90%]">
           <h4 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-800">
             St. David
           </h4>
@@ -58,7 +58,7 @@ const WelcomeDetails = (props: Props) => {
             </Link>
           </ul>
         </div>
-        <div className="hidden flex-col max-sm:flex">
+        <div className="hidden flex-col max-md:w-[70%] max-sm:flex">
           {/* <h4>Click on A Link to Get Started</h4> */}
           <Lottie
             animationData={lottieSignup}
