@@ -14,8 +14,8 @@ const Header = () => {
     setIsBottomItemVisible(!isBottomItemVisible);
   };
   return (
-    <header className="relative flex flex-rol h-20 items-center justify-between w-full bg-neutral-900 px-12 py-12 max-md:p-5 ">
-      <div className="text-3xl font-bold uppercase text-slate-300 cursor-pointer hover:text-slate-500">
+    <header className="relative flex flex-rol h-20 items-center justify-between w-full bg-neutral-900 px-12 py-12 max-md:p-2 ">
+      <div className="text-2xl font-bold uppercase text-slate-300 cursor-pointer hover:text-slate-500 ">
         St. David University
       </div>
       <div className="flex flex-row justify-evenly gap-7 px-7 sm:hidden md:hidden max-sm:hidden xl:flex lg:flex z-[900]">

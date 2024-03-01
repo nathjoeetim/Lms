@@ -28,7 +28,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.className} ${isLoaded ? "loaded" : ""}`}>
+      <body className={`${inter.className} ${isLoaded ? "loaded" : ""}  `}>
         <Provider store={store}>
           {children}
           <Toaster richColors />

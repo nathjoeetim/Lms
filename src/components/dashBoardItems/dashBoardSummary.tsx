@@ -10,7 +10,7 @@ import { FaBusAlt } from "react-icons/fa";
 import { FaBook } from "react-icons/fa";
 // import { FaHandHoldingUsd } from "react-icons/fa";
 // import { RiLuggageCartFill } from "react-icons/ri";
-import { BsSnow } from "react-icons/bs"
+import { BsSnow } from "react-icons/bs";
 type CardContentAliases = {
   icon: React.ComponentType<{ size?: number | string; color?: string }>;
   header: string;

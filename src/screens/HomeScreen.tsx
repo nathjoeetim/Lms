@@ -10,7 +10,7 @@ const HomeScreen = (props: Props) => {
   return (
     <>
       <Header />
-      <div className="flex h-[89vh] flex-col overflow-y-scroll overflow-x-hidden custom-scrollbar">
+      <div className="flex h-[85vh] flex-col overflow-y-scroll overflow-x-hidden custom-scrollbar">
         <WelcomeDetails />
         <div className="flex-grow overflow-y-auto">
           <Programs />

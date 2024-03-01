@@ -77,12 +77,12 @@ const OtherFeesCardComponent = () => {
   ]);
 
   return (
-    <div className="flex flex-roll w-full p-4 justify-evenly">
+    <div className="flex flex-roll gap-5 w-full p-4 justify-evenly max-md:grid max-md:grid-cols-2 max-md:justify-items-center md:align-items-center">
       {CardContentModel.map((element: CardContentAliases, index: number) => {
         return (
           <Card
             key={index}
-            className="flex flex-col items-start p-3 gap-4 w-[295px] h-[243px]"
+            className="flex flex-col items-start p-3 gap-4 w-[295px] h-[243px] max-md:w-[100%]"
           >
             <div className="flex flex-row gap-2 border-b border-b-slate-400 pb-1 w-full">
               <div className="flex flex-row items-center justify-center  bg-[#0d6efd] h-12 w-12 rounded-md p-3">
@@ -167,7 +167,7 @@ const OtherFeesCardComponent = () => {
       })}
     </div>
   );
-}
+};
 
 export default OtherFeesCardComponent;
 

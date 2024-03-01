@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FindStudentInDartment } from "@/utils/types";
+import EditStudentDetails from "./editStudentDetails";
 
 function DisplayUserDetailsHandler({
   studentData,
@@ -77,8 +78,8 @@ function DisplayUserDetailsHandler({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Hide</AlertDialogCancel>
-          <AlertDialogAction>Edit Student Details</AlertDialogAction>
+          <AlertDialogCancel>Done</AlertDialogCancel>
+          <EditStudentDetails />
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -13,7 +13,7 @@ type Props = {};
 const WelcomeDetails = (props: Props) => {
   return (
     <div className="flex flex-col items-center justify-start">
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 flex flex-row items-center p-4 max-md:flex-col">
+      <div className="bg-[#AD7DF9] flex flex-row items-center p-4 max-md:flex-col">
         <Lottie
           animationData={lottieData}
           className="w-[60%]"
@@ -58,7 +58,7 @@ const WelcomeDetails = (props: Props) => {
             </Link>
           </ul>
         </div>
-        <div className="hidden flex-col max-md:w-[70%] max-sm:flex">
+        <div className="hidden flex-col max-md:w-[40%] max-sm:flex">
           {/* <h4>Click on A Link to Get Started</h4> */}
           <Lottie
             animationData={lottieSignup}
@@ -70,10 +70,10 @@ const WelcomeDetails = (props: Props) => {
           />
         </div>
       </div>
+      <h4 className="flex flex-row w-full items-center justify-center p-3 text-slate-500 font-bold text-5xl gap-2 underline">
+        Why Us ? <BiConfused />{" "}
+      </h4>
       <Card className="flex flex-col items-center justify-between gap-2 p-3   w-[97%] mx-auto mt-3 ">
-        <h4 className="flex flex-row w-full items-center justify-center p-3 text-slate-500 font-bold text-5xl gap-2 underline">
-          Why Us ? <BiConfused />{" "}
-        </h4>
         <div className="flex flex-row items-center justify-between gap-2 max-md:flex-col ">
           <p className="w-[50%] p-2 font-medium text-lg text-center  max-md:w-[95%]  max-md:text-justify ">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi,

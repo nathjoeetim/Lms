@@ -34,8 +34,8 @@ type AnouncAliese = {
 function NewAndEventComponent() {
   return (
     <div className="flex flex-row p-7 box-border justify-evenly w-full">
-      <Card className="flex flex-col items-center box-border p-3 gap-4 md:w-[300px] xl:w-[500px]  h-[243px]">
-        <Card className="flex flex-col items-start p-2 gap-4 md:w-[295px] xl:w-[450px]  h-[243px] bg-transparent border-none shadow-none">
+      <Card className="flex flex-col items-center box-border p-3 gap-4 md:w-[450px] max-xl:w-[500px]  h-[243px]">
+        <Card className="flex flex-col items-start p-2 gap-4 max-md:w-[405px] max-xl:w-[450px]  h-[243px] bg-transparent border-none shadow-none">
           <div className="flex flex-row items-center border-b p-2 border-b-slate-400 pb-2 item-center justify-start gap-5 w-full">
             <FaBullhorn size={18} />
             <h5 className="font-bold text-[1.5rem]">News And Update</h5>

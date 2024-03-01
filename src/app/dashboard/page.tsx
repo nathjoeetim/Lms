@@ -6,9 +6,7 @@ import NewAndEventComponent from "@/components/dashBoardItems/new/newsContainer"
 import OtherFeesCardComponent from "@/components/dashBoardItems/otherFeesCardComponent";
 import PopulationDistributionComponent from "@/components/dashBoardItems/populationDistribution";
 import { FetchData } from "@/redux/fetchCurrentUserData";
-
 import { auth_token } from "@/utils/constant";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";

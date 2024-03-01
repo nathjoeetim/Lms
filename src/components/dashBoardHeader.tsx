@@ -42,7 +42,6 @@ function HeaderDashboard() {
       // Adjust visibility based on screen width
       setSidebarVisibility(screenWidth <= 730);
       dispatch(UserInterfaceActions.onShowSideBar(true));
-
     }
 
     // Initial setup on component mount
@@ -63,7 +62,7 @@ function HeaderDashboard() {
 
   return (
     <div className="flex flex-row items-center gap-3 w-full bg-white transition duration-300 ease-in-out shadow-lg">
-      <div className="flex flex-row items-center justify-center cursor-pointer border-r border-solid border-gray-500 h-full w-11">
+      <div className="flex flex-row items-center justify-center cursor-pointer border-r border-solid border-gray-500 h-full w-11 bg-[#66EECE] ">
         {sideBarState ? (
           <MdOutlineKeyboardDoubleArrowLeft
             size={26}

@@ -23,6 +23,8 @@ import { UserInterfaceActions } from "@/redux/ui";
 import SideBarItemsComponent from "@/components/SideBarItems";
 import { useRouter } from "next/navigation";
 import LogoutButton from "@/hooks/useLogout";
+import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
+import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { HashSpinner } from "@/components/loader";
 
 export interface Metadata {
@@ -59,8 +61,10 @@ const DashBoardLayout: React.FC<RootLayoutProps> = ({ children }) => {
       const screenWidth = window.innerWidth;
 
       // Adjust visibility based on screen width
-      if (screenWidth >= 730) {
+      if (screenWidth >= 1264) {
         dispatch(UserInterfaceActions.onShowSideBar(true));
+      } else {
+        dispatch(UserInterfaceActions.onShowSideBar(false));
       }
     }
 
@@ -75,6 +79,10 @@ const DashBoardLayout: React.FC<RootLayoutProps> = ({ children }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, [dispatch, isMounted]);
+
+  function hideSideBarHandeer() {
+    dispatch(UserInterfaceActions.onTooggleSideBarMenu());
+  }
 
   return (
     <>
@@ -119,6 +127,24 @@ const DashBoardLayout: React.FC<RootLayoutProps> = ({ children }) => {
               </div>
             </div>
             <SideBarItemsComponent />
+            <div
+              onClick={hideSideBarHandeer}
+              className="flex flex-row item-center h-12 w-11 absolute top-0 bg-[#66EECE] right-[-45px]"
+            >
+              <div className="flex flex-row items-center justify-center cursor-pointer border-r border-solid border-gray-500 h-full w-11">
+                {sideBarState ? (
+                  <MdOutlineKeyboardDoubleArrowLeft
+                    size={26}
+                    style={{ color: "gray" }}
+                  />
+                ) : (
+                  <MdOutlineKeyboardDoubleArrowRight
+                    size={26}
+                    style={{ color: "gray" }}
+                  />
+                )}
+              </div>
+            </div>
           </SideBarContainer>
           <div className="absolute flex flex-col p-3 bg-slate-600 bottom-2 items-center justify-center right-[-1rem] transform -translate-x-1/2 rounded-lg opacity-75 z-50 cursor-pointer hover:opacity-100">
             <PiDesktopTowerDuotone size={23} color="white" />
@@ -185,8 +211,9 @@ const SideBarContainer = styled.div<SideBarContainerProps>`
   transform: translateX(${({ $isVisible }) => ($isVisible ? "0" : "-80rem")});
   transition: opacity 1s ease-in-out, transform 0.3s ease-in-out, left 0.3s ease;
 
-  @media screen and (max-width: 730px) {
+  @media screen and (max-width: 1264px) {
     z-index: 1000;
     position: absolute;
+    left: 0;
   }
 `;

@@ -81,7 +81,7 @@ const Login = () => {
   };
 
   return (
-    <Card className="w-[350px] md:w-[450px]">
+    <Card className="w-[350px] md:w-[450px] max-md:w-[90%] max-md:h-[80%]">
       <CardHeader>
         <CardTitle className="text-center">Login</CardTitle>
         <CardDescription className="text-center">
@@ -132,7 +132,7 @@ const Login = () => {
               </Button>
             )}
           </div>
-          <div className="flex flex-row-reverse items-start justify-between w-full">
+          <div className="flex flex-row-reverse items-start justify-between w-full max-md:flex-col max-md:gap-20">
             <div className="w-full flex justify-end mt-5">
               <Link href="/forgot-password" className="text-sm">
                 Forgot password?

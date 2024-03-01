@@ -49,12 +49,12 @@ function FeesTopComponent() {
   ]);
 
   return (
-    <div className="flex flex-row p-4 justify-evenly w-full">
+    <div className="flex flex-row p-4 justify-evenly gap-3 w-full">
       {CardContentModel.map((element, index) => {
         return (
           <Card
             key={index}
-            className="flex flex-col items-start p-4 gap-4 md:w-[295px] xl:w-[450px]  h-[243px]"
+            className="flex flex-col w-[85%] items-start p-4 gap-4 max-md:w-[90%] max-xl:w-[450px] max-lg:w-[450px] h-[243px]"
           >
             <div className="flex flex-row gap-2 border-b border-b-slate-400 pb-2 w-full">
               <div className="flex flex-row items-center justify-center  bg-[#0d6efd] h-12 w-12 rounded-md p-3">
@@ -124,7 +124,7 @@ function FeesTopComponent() {
                 <div className="flex flex-row justify-between items-center w-full">
                   <h5 className="text-[.7rem] font-medium">Due</h5>
                   <span className="text-[.8rem]">
-                  ₦ {element.titalInvoice - element.paidAmount}
+                    ₦ {element.titalInvoice - element.paidAmount}
                   </span>
                 </div>
                 <div className="flex flex-row justify-between items-center w-full">

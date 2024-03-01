@@ -35,7 +35,7 @@ function PeopleSubComponent() {
     },
     {
       tittle: "Graduated (Aluami)",
-      link: "#",
+      link: "/dashboard/students/graduate",
     },
   ]);
 
@@ -53,7 +53,7 @@ function PeopleSubComponent() {
   const [employees, _setEmployees] = useState<subContentItem[]>([
     {
       tittle: "Lectures",
-      link: "#",
+      link: "/dashboard/lecturer",
     },
     {
       tittle: "Bursary Officer/ Accountant",
@@ -167,7 +167,7 @@ function PeopleSubComponent() {
       </Accordion> */}
 
       {/* Staff / employees section  */}
-      {/* <Accordion type="single" collapsible>
+      <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger
             onClick={handleClick3}
@@ -197,7 +197,7 @@ function PeopleSubComponent() {
             );
           })}
         </AccordionItem>
-      </Accordion> */}
+      </Accordion>
     </div>
   );
 }
