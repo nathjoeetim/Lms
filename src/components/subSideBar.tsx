@@ -46,7 +46,7 @@ const SubSideBarComponent: React.FC<SubSideBarProps> = ({
       ) : onSelectedIndex === 6 ? (
         <FinanceSubComponent />
       ) : (
-        <p>Hello world</p>
+        <AdminAbilities />
       )}
     </div>
   );
@@ -62,7 +62,7 @@ function DashBoardSubComponent() {
     <Link href="/dashboard">
       <div
         className={`flex flex-row items-center justify-start h-14 gap-2 ${
-          isActive ? "bg-[#F0F2F5]" : "bg-transparent" // Replace with a specific shade or color
+          isActive ? "bg-[#F0F2F5]" : "bg-transparent"
         } p-2 text-sm font-sans cursor-pointer text-[#33353F]`}
       >
         <GoHome size={15} />
@@ -85,6 +85,49 @@ function LmsSubComponent() {
         <FaBookAtlas size={15} />
         <div className="text-slate-500 font-semibold">Resourse Library</div>
       </div>
+    </div>
+  );
+}
+
+function AdminAbilities() {
+  const pathname = usePathname();
+  const isActive1 = pathname === "/dashboard/CMS";
+  const isActive2 = pathname === "/dashboard/admin_management";
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div
+        className={`flex flex-row items-center justify-start h-14 gap-2 hover:bg-[#F0F2F5] p-2 text-sm font-sans cursor-pointer  text-[#33353F]${
+          isActive1
+            ? "border-l-4 border-indigo-300 text-indigo-400 bg-[#F0F2FF5] bg-[#F0F2F5]"
+            : ""
+        }`}
+      >
+        <Link
+          href="/dashboard/CMS"
+          className={`flex flex-row gap-1 items-center justify-start text-slate-500 font-semibold h-14 w-full `}
+        >
+          <FaLaptopHouse size={15} />
+          Edit content{" "}
+        </Link>
+      </div>
+      <div
+        className={`flex flex-row items-center justify-start h-14 gap-2 hover:bg-[#F0F2F5] p-2 text-sm font-sans cursor-pointer  text-[#33353F]${
+          isActive2
+            ? "border-l-4 border-indigo-300 text-indigo-400 bg-[#F0F2FF5] bg-[#F0F2F5]"
+            : ""
+        }`}
+      >
+        <Link
+          href="/dashboard/admin_management"
+          className={`flex flex-row gap-1 items-center justify-start text-slate-500 font-semibold h-14 w-full `}
+        >
+          {" "}
+          <FaBookAtlas size={15} />
+          Edit Admin
+        </Link>
+      </div>
+      <div className="flex flex-row items-center justify-start h-14 gap-2 hover:bg-[#F0F2F5] p-2 text-sm font-sans cursor-pointer  text-[#33353F]"></div>
     </div>
   );
 }

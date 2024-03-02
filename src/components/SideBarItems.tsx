@@ -58,26 +58,26 @@ function SideBarItemsComponent() {
       text: "Academics",
       link: "#",
     },
-    // {
-    //   icon: AiOutlineLaptop,
-    //   text: "LMS",
-    //   link: "#",
-    // },
-    // {
-    //   icon: TiContacts,
-    //   text: "Results",
-    //   link: "#",
-    // },
-    // {
-    //   icon: GiTakeMyMoney,
-    //   text: "Finance",
-    //   link: "#",
-    // },
-    // {
-    //   icon: BsThreeDots,
-    //   text: "Admin",
-    //   link: "#",
-    // },
+    {
+      icon: AiOutlineLaptop,
+      text: "LMS",
+      link: "#",
+    },
+    {
+      icon: TiContacts,
+      text: "Results",
+      link: "#",
+    },
+    {
+      icon: GiTakeMyMoney,
+      text: "Finance",
+      link: "#",
+    },
+    {
+      icon: BsThreeDots,
+      text: "Admin",
+      link: "#",
+    },
     // Add more menu items as needed
   ];
 
